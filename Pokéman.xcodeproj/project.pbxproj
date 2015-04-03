@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2757C5341ACDEEDA00B2176D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2757C5331ACDEEDA00B2176D /* main.cpp */; };
+		2757C53C1ACDEF5F00B2176D /* poke.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2757C53A1ACDEF5F00B2176D /* poke.cpp */; };
+		2757C53E1ACDEFC900B2176D /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 2757C53D1ACDEFC900B2176D /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,13 @@
 
 /* Begin PBXFileReference section */
 		2757C5301ACDEEDA00B2176D /* Pokéman */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Pokéman"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2757C5331ACDEEDA00B2176D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		2757C53A1ACDEF5F00B2176D /* poke.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poke.cpp; sourceTree = SOURCE_ROOT; };
+		2757C53B1ACDEF5F00B2176D /* poke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poke.h; sourceTree = SOURCE_ROOT; };
+		2757C53D1ACDEFC900B2176D /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
+		27F257391ACED4150006E15E /* MST.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MST.h; sourceTree = SOURCE_ROOT; };
+		27F2573A1ACED41F0006E15E /* OPTTSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OPTTSP.h; sourceTree = SOURCE_ROOT; };
+		27F2573B1ACED4290006E15E /* FASTTSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FASTTSP.h; sourceTree = SOURCE_ROOT; };
+		27F2573C1ACED88D0006E15E /* node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +64,13 @@
 		2757C5321ACDEEDA00B2176D /* Pokéman */ = {
 			isa = PBXGroup;
 			children = (
-				2757C5331ACDEEDA00B2176D /* main.cpp */,
+				2757C53B1ACDEF5F00B2176D /* poke.h */,
+				2757C53A1ACDEF5F00B2176D /* poke.cpp */,
+				2757C53D1ACDEFC900B2176D /* Makefile */,
+				27F257391ACED4150006E15E /* MST.h */,
+				27F2573A1ACED41F0006E15E /* OPTTSP.h */,
+				27F2573B1ACED4290006E15E /* FASTTSP.h */,
+				27F2573C1ACED88D0006E15E /* node.h */,
 			);
 			path = "Pokéman";
 			sourceTree = "<group>";
@@ -118,7 +131,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2757C5341ACDEEDA00B2176D /* main.cpp in Sources */,
+				2757C53E1ACDEFC900B2176D /* Makefile in Sources */,
+				2757C53C1ACDEF5F00B2176D /* poke.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +246,7 @@
 				2757C5391ACDEEDA00B2176D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

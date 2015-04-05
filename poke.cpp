@@ -59,24 +59,27 @@ void parse_command_line_input(const int & argc, char* argv[], MODE &mode) {
 	bool called_mode = false;
 
 	// Use getopt to parse through command line input
-	while ((c = getopt_long(argc, argv, "h", longopts, &idx)) != -1) {
+	while ((c = getopt_long(argc, argv, "m:h", longopts, &idx)) != -1) {
 		switch (c) {
-			case 'm':
-				if (strcmp(optarg, "MST")) {
+			case 'm': {
+				if (*optarg == 'M') {
 					mode = MST_MODE;
 				}
-				else if (strcmp(optarg, "OPTTSP")) {
+				else if (*optarg == 'O') {
 					mode = OPTTSP_MODE;
 				}
-				else if (strcmp(optarg, "FASTTSP")) {
+				else if (*optarg == 'F') {
 					mode = FASTTSP_MODE;
 				}
 
-			case 'h':
+				called_mode = true;
+				break;
+			}
+			case 'h': {
 				cout << "Helpful help message" << endl;
 
 				exit(0);
-
+			}
 			default:
 				break;
 		} // switch

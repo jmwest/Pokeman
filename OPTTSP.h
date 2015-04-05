@@ -18,7 +18,7 @@ using namespace std;
 
 class OPTTSP {
 private:
-	
+	void get_pokemon_locations(vector <node> &nodes, const int &num_pokemon);
 
 public:
 	OPTTSP();
@@ -31,6 +31,29 @@ OPTTSP::OPTTSP() {}
 void OPTTSP::run_OPTTSP() {
 
 	
+
+	return;
+}
+
+void OPTTSP::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon) {
+
+	string input;
+	
+	getline(cin, input);
+
+	static const char c = ' ';
+	for (int i = 0; i < num_pokemon; ++i) {
+		if (getline(cin, input)) {
+			size_t pos = input.find(c);
+
+			node& current = nodes.at(i);
+			current.x = stoi(input.substr(0, pos));
+			current.y = stoi(input.substr(pos + 1));
+		}
+		else {
+			cerr << "\ngetline failed" << endl;
+		}
+	}
 
 	return;
 }

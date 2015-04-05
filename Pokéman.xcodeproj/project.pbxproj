@@ -28,10 +28,14 @@
 		2757C53A1ACDEF5F00B2176D /* poke.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poke.cpp; sourceTree = SOURCE_ROOT; };
 		2757C53B1ACDEF5F00B2176D /* poke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poke.h; sourceTree = SOURCE_ROOT; };
 		2757C53D1ACDEFC900B2176D /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
+		27AE11D01AD0631A00A3212B /* test-MST2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST2.txt"; sourceTree = SOURCE_ROOT; };
+		27AE11D11AD070BB00A3212B /* test-MST3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST3.txt"; sourceTree = SOURCE_ROOT; };
+		27AE11D21AD0772600A3212B /* test-MST4.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST4.txt"; sourceTree = SOURCE_ROOT; };
 		27F257391ACED4150006E15E /* MST.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MST.h; sourceTree = SOURCE_ROOT; };
 		27F2573A1ACED41F0006E15E /* OPTTSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OPTTSP.h; sourceTree = SOURCE_ROOT; };
 		27F2573B1ACED4290006E15E /* FASTTSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FASTTSP.h; sourceTree = SOURCE_ROOT; };
 		27F2573C1ACED88D0006E15E /* node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node.h; sourceTree = SOURCE_ROOT; };
+		27F2573E1ACF0D190006E15E /* test-MST.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST.txt"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +75,20 @@
 				27F2573A1ACED41F0006E15E /* OPTTSP.h */,
 				27F2573B1ACED4290006E15E /* FASTTSP.h */,
 				27F2573C1ACED88D0006E15E /* node.h */,
+				27F2573D1ACF0CD60006E15E /* Test */,
 			);
 			path = "Pokéman";
+			sourceTree = "<group>";
+		};
+		27F2573D1ACF0CD60006E15E /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				27F2573E1ACF0D190006E15E /* test-MST.txt */,
+				27AE11D01AD0631A00A3212B /* test-MST2.txt */,
+				27AE11D11AD070BB00A3212B /* test-MST3.txt */,
+				27AE11D21AD0772600A3212B /* test-MST4.txt */,
+			);
+			name = Test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

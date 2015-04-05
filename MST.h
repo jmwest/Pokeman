@@ -74,7 +74,7 @@ void MST::run_MST() {
 					}
 				}
 
-				if (c_edge.distance > 0.5) {
+				if (c_edge.distance >= -0.5) {
 					if (next_edge.previous == -1) {
 						next_edge.previous = j;
 						next_edge.distance = c_edge.distance;

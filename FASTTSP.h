@@ -43,7 +43,7 @@ void FASTTSP::run_FASTTSP() {
 
 	shortest_path = make_fly_MST(nodes, num_pokemon);
 
-	cout << "first estimate: " << shortest_path << endl;
+	cout << "\nfirst estimate: " << shortest_path << endl;
 
 	return;
 }
@@ -86,6 +86,9 @@ double FASTTSP::make_fly_MST(vector <node> &nodes, const int &num_pokemon) {
 				c_edge.distance = node_distance(c_node, nodes.at(j));
 				c_edge.previous = j;
 			}
+			else {
+				distances.at(i).at(j).distance = -1.0;
+			}
 		}
 
 		sort(distances.at(i).begin(), distances.at(i).end(), nodeEdgeComparator());
@@ -93,19 +96,19 @@ double FASTTSP::make_fly_MST(vector <node> &nodes, const int &num_pokemon) {
 
 	vector <bool> in_tree (num_pokemon, false);
 	in_tree.front() = true;
-	list <int> route;
-
+	vector <int> route (num_pokemon, 0);
+//cerr << "oh" << endl;
 	int current = 0;
 	double total_dist = 0.0;
 	for (int k = 1; k < num_pokemon; ++k) {
 		int pos = 1;
 		bool found = false;
+//		cerr << "\nk: " << k << " current: " << current << endl;
+		route.at(k - 1) = current;
 
-		route.push_back(current);
-
-		while (!found) {
+		while (!found && (pos < num_pokemon)) {
 			nodeEdge& next_edge = distances.at(current).at(pos);
-
+//cerr << "pos: " << pos << " next_edge: " << next_edge.previous << ' ';
 			if (!in_tree.at(next_edge.previous)) {
 				in_tree.at(next_edge.previous) = true;
 				total_dist += next_edge.distance;
@@ -116,14 +119,14 @@ double FASTTSP::make_fly_MST(vector <node> &nodes, const int &num_pokemon) {
 			else { ++pos; }
 		}
 	}
-
-	route.push_back(current);
+//	cerr << "no" << endl;
+	route.back() = current;
 
 	total_dist += node_distance(nodes.at(current), nodes.at(0));
 
 	cout << "Route:\n";
 
-	for (list <int>::iterator it = route.begin(); it != route.end(); ++it) {
+	for (vector <int>::iterator it = route.begin(); it != route.end(); ++it) {
 		cout << *it << ' ';
 	}
 	cout << "\n";

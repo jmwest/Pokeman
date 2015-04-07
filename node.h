@@ -33,6 +33,13 @@ public:
 	}
 };
 
+struct nodeEdgeMaxComparator {
+public:
+	bool operator() (const nodeEdge &one, const nodeEdge &two) {
+		return one.distance > two.distance;
+	}
+};
+
 struct nodeBeginnerDistance {
 public:
 	double operator() (const node &one, const node &two);
@@ -47,8 +54,8 @@ double nodeBeginnerDistance::operator() (const node &one, const node &two) {
 		return -1;
 	}
 	else {
-		double x_dist = one.x - two.x;
-		double y_dist = one.y - two.y;
+		int x_dist = one.x - two.x;
+		int y_dist = one.y - two.y;
 		double dist = (x_dist * x_dist) + (y_dist * y_dist);
 
 		return sqrt(dist);

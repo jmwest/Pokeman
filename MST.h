@@ -53,6 +53,7 @@ void MST::run_MST() {
 	nodeEdge next_edge = nodeEdge(-1, 0);
 
 	in_tree.at(current) = true;
+	min_dist.at(current).previous = 0;
 	min_dist.at(current).distance = 0;
 
 	for (int i = 1; i < num_pokemon; ++i) {
@@ -74,7 +75,7 @@ void MST::run_MST() {
 					}
 				}
 
-				if (c_edge.distance >= -0.5) {
+				if (c_edge.previous >= -0.5) {
 					if (next_edge.previous == -1) {
 						next_edge.previous = j;
 						next_edge.distance = c_edge.distance;
@@ -169,6 +170,5 @@ void MST::print_MST(const double& distance, const vector <nodeEdge>& edges) {
 
 	return;
 }
-
 
 #endif

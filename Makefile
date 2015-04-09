@@ -59,7 +59,7 @@ TESTS       = $(TESTSOURCES:%.cpp=%)
 SOURCES 	= $(wildcard *.cpp)
 SOURCES     := $(filter-out $(TESTSOURCES), $(SOURCES))
 # list of objects used in project
-OBJECTS		= $(SOURCES:logman.cpp=logman.o)
+OBJECTS		= $(SOURCES:poke.cpp=poke.o)
 
 # TODO
 # If main() is in a file named project*.cpp, use the following line
@@ -94,11 +94,11 @@ all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 ifeq ($(EXECUTABLE), executable)
-@echo Edit EXECUTABLE variable, at first \"TODO\" in Makefile.
-@echo Using default a.out.
-$(CXX) $(CXXFLAGS) $(OBJECTS)
+	@echo Edit EXECUTABLE variable, at first \"TODO\" in Makefile.
+	@echo Using default a.out.
+	$(CXX) $(CXXFLAGS) $(OBJECTS)
 else
-$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXECUTABLE)
 endif
 
 # Automatically generate any build rules for test*.cpp files
@@ -108,10 +108,10 @@ OBJS = $$(SRCS:%.cpp=%.o)
 $(1): CXXFLAGS += -pg -DDEBUG
 $(1): $$(OBJS) $$(SRCS)
 ifeq ($$(PROJECTFILE),)
-@echo Edit PROJECTFILE variable at second \"TODO\" to cpp file with main\(\)
-@exit 1
+	@echo Edit PROJECTFILE variable at second \"TODO\" to cpp file with main\(\)
+	@exit 1
 endif
-$$(CXX) $$(CXXFLAGS) $$(OBJS) $(1).cpp -o $(1)
+	$$(CXX) $$(CXXFLAGS) $$(OBJS) $(1).cpp -o $(1)
 endef
 $(foreach test, $(TESTS), $(eval $(call make_tests, $(test))))
 
@@ -119,27 +119,27 @@ alltests: clean $(TESTS)
 
 # rule for creating objects
 %.o:
-$(CXX) $(CXXFLAGS) -c $*.cpp
+	$(CXX) $(CXXFLAGS) -c $*.cpp
 
 # make clean - remove .o files, executables, tarball
 clean:
-rm -f $(OBJECTS) $(EXECUTABLE) $(TESTS) $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
+	rm -f $(OBJECTS) $(EXECUTABLE) $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
 
 # make partialsubmit.tar.gz - cleans, runs dos2unix, creates tarball omitting test cases
 PARTIAL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp))
 $(PARTIAL_SUBMITFILE): $(PARTIAL_SUBMITFILES)
-rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
-#dos2unix $(PARTIAL_SUBMITFILES)
-tar -vczf $(PARTIAL_SUBMITFILE) $(PARTIAL_SUBMITFILES)
-@echo !!! WARNING: No test cases included. Use 'make fullsubmit' to include test cases. !!!
+	rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
+	#dos2unix $(PARTIAL_SUBMITFILES)
+	tar -vczf $(PARTIAL_SUBMITFILE) $(PARTIAL_SUBMITFILES)
+	@echo !!! WARNING: No test cases included. Use 'make fullsubmit' to include test cases. !!!
 
 # make fullsubmit.tar.gz - cleans, runs dos2unix, creates tarball including test cases
 FULL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp test*.txt))
 $(FULL_SUBMITFILE): $(FULL_SUBMITFILES)
-rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
-#dos2unix $(FULL_SUBMITFILES)
-tar -vczf $(FULL_SUBMITFILE) $(FULL_SUBMITFILES)
-@echo !!! Final submission prepared, test cases included... READY FOR GRADING !!!
+	rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
+	#dos2unix $(FULL_SUBMITFILES)
+	tar -vczf $(FULL_SUBMITFILE) $(FULL_SUBMITFILES)
+	@echo !!! Final submission prepared, test cases included... READY FOR GRADING !!!
 
 # shortcut for make submit tarballs
 partialsubmit: $(PARTIAL_SUBMITFILE)
@@ -148,7 +148,7 @@ fullsubmit: $(FULL_SUBMITFILE)
 define MAKEFILE_HELP
 EECS281 Advanced Makefile Help
 * This Makefile uses advanced techniques, for more information:
-$$ man make
+	$$ man make
 
 * General usage
 1. Follow directions at each "TODO" in this file.
@@ -182,12 +182,11 @@ endef
 export MAKEFILE_HELP
 
 help:
-@echo "$$MAKEFILE_HELP"
+	@echo "$$MAKEFILE_HELP"
 
 #####################
 # MY OWN TEST CASES #
 #####################
-
 
 #######################
 # TODO (begin) #

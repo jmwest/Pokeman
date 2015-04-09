@@ -22,6 +22,10 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
+	// valgrind will report memory leak when sync_with_stdio is false //
+	ios_base::sync_with_stdio(false);								 ///
+	////////////////////////////////////////////////////////////////////
+
 	MODE mode = NONE;
 
 	parse_command_line_input(argc, argv, mode);
@@ -33,20 +37,20 @@ int main(int argc, char* argv[]) {
 			break;
 		}
 		case OPTTSP_MODE: {
-//			OPTTSP opt_tsp;
-//			opt_tsp.run_OPTTSP();
+			OPTTSP opt_tsp;
+			opt_tsp.run_OPTTSP();
 
-			ofstream out;
-			out.open("test-MST5.txt");
-
-			out << "10000\n";
-			for (int i = -50; i < 50; ++i) {
-				for (int j = -50; j < 50; ++j) {
-					out << i << ' ' << j << '\n';
-				}
-			}
-
-			out.close();
+//			ofstream out;
+//			out.open("test-MST5.txt");
+//
+//			out << "10000\n";
+//			for (int i = -50; i < 50; ++i) {
+//				for (int j = -50; j < 50; ++j) {
+//					out << i << ' ' << j << '\n';
+//				}
+//			}
+//
+//			out.close();
 
 			break;
 		}

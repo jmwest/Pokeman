@@ -108,6 +108,8 @@ void MST::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon) {
 
 	string input;
 	bool coast_pkmn = false;
+	bool land_pkmn = false;
+	bool sea_pkmn = false;
 
 	getline(cin, input);
 
@@ -127,6 +129,12 @@ void MST::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon) {
 				else if ((current.x == 0) && (current.y < 0)) {
 					coast_pkmn = true;
 				}
+				else if ((current.x > 0) && (current.y > 0)) {
+					land_pkmn = true;
+				}
+				else if ((current.x < 0) && (current.y < 0)) {
+					sea_pkmn = true;
+				}
 			}
 		}
 		else {
@@ -135,8 +143,10 @@ void MST::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon) {
 	}
 
 	if (!coast_pkmn) {
-		cerr << "Cannot construct MST" << endl;
-		exit(1);
+		if (land_pkmn && sea_pkmn) {
+			cerr << "Cannot construct MST" << endl;
+			exit(1);
+		}
 	}
 
 	return;

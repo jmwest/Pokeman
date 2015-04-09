@@ -10,6 +10,7 @@
 #define Poke_man_node_h
 
 #include <cmath>
+#include <algorithm>
 
 struct node {
 public:

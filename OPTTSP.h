@@ -13,9 +13,9 @@
 #include <iomanip>
 #include <vector>
 #include <list>
+#include <queue>
 
 #include "node.h"
-#include "FASTTSP.h"
 
 using namespace std;
 
@@ -24,10 +24,10 @@ private:
 	void get_pokemon_locations(vector <node> &nodes,
 							   const int &num_pokemon);
 
-//	double make_TSP_approximation(const vector <node> &nodes,
-//								  vector < vector <nodeEdge> > &edges,
-//								  vector <int> &route,
-//								  const int &num_pokemon);
+	double make_TSP_approximation(const vector <node> &nodes,
+								  vector < vector <nodeEdge> > &edges,
+								  vector <int> &route,
+								  const int &num_pokemon);
 
 	void priority_depth_first_search(const vector <node> &nodes,
 									 const vector < vector <nodeEdge> > &edges,
@@ -74,8 +74,7 @@ void OPTTSP::run_OPTTSP() {
 
 	get_pokemon_locations(nodes, num_pokemon);
 
-	FASTTSP fast;
-	shortest_path = fast.make_TSP_approximation(nodes, edges, route, num_pokemon);
+	shortest_path = make_TSP_approximation(nodes, edges, route, num_pokemon);
 
 //	cout << "\nfirst estimate: " << shortest_path << endl;
 
@@ -123,88 +122,33 @@ void OPTTSP::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon
 	return;
 }
 
-//double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
-//									  vector < vector <nodeEdge> > &edges,
-//									  vector <int> &route,
-//									  const int &num_pokemon) {
-//
-//	nodeFlyDistance node_distance = nodeFlyDistance();
-//
-//	for (int i = 0; i < num_pokemon; ++i) {
-//
-//		node c_node = nodes.at(i);
-//		for (int j = 0; j < num_pokemon; ++j) {
-//
-//			if (i != j) {
-//				nodeEdge& c_edge = edges.at(i).at(j);
-//				c_edge.distance = node_distance(c_node, nodes.at(j));
-//				c_edge.previous = j;
-//			}
-//			else {
-//				edges.at(i).at(j).distance = -1.0;
-//			}
-//		}
-//
-//		sort(edges.at(i).begin(), edges.at(i).end(), nodeEdgeComparator());
-//	}
-//
-////	vector <int> num_connections (num_pokemon, 0);
-////	++num_connections.at(0);
-////
-////	int current = 0;
-////	double total_dist = 0.0;
-////	for (int k = 1; k < num_pokemon; ++k) {
-////		int pos = 1;
-////		bool found = false;
-////
-////		while (!found) {
-////			nodeEdge& next_edge = edges.at(current).at(pos);
-////			
-////			if (num_connections.at(next_edge.previous) < 2) {
-////				++num_connections.at(next_edge.previous);
-////				total_dist += next_edge.distance;
-////
-////				found = true;
-////			}
-////			else { ++pos; }
-////		}
-////
-////		found = false;
-////		pos = 1;
-////
-////		while (!found) {
-////
-////			if (pos < num_pokemon) {
-////				if (num_connections.at(pos) == 0) {
-////					current = pos;
-////
-////					found = true;
-////				}
-////				else { ++pos; }
-////			}
-////			else {
-////				if (num_connections.at(pos % num_pokemon) == 1) {
-////					current = pos;
-////					
-////					found = true;
-////				}
-////				else { ++pos; }
-////			}
-////		}
-////	}
-////
-////	for (int m = 0; m < num_pokemon; ++m) {
-////		if (m != current) {
-////			if (num_connections.at(m) < 2) {
-////				total_dist += edges.at(current).at(m).distance;
-////
-////				break;
-////			}
-////		}
-////	}
-//
-//	vector <bool> in_tree (num_pokemon, false);
-//	in_tree.at(0) = true;
+double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
+									  vector < vector <nodeEdge> > &edges,
+									  vector <int> &route,
+									  const int &num_pokemon) {
+
+	nodeFlyDistance node_distance = nodeFlyDistance();
+
+	for (int i = 0; i < num_pokemon; ++i) {
+
+		node c_node = nodes.at(i);
+		for (int j = 0; j < num_pokemon; ++j) {
+
+			if (i != j) {
+				nodeEdge& c_edge = edges.at(i).at(j);
+				c_edge.distance = node_distance(c_node, nodes.at(j));
+				c_edge.previous = j;
+			}
+			else {
+				edges.at(i).at(j).distance = -1.0;
+			}
+		}
+
+		sort(edges.at(i).begin(), edges.at(i).end(), nodeEdgeComparator());
+	}
+
+//	vector <int> num_connections (num_pokemon, 0);
+//	++num_connections.at(0);
 //
 //	int current = 0;
 //	double total_dist = 0.0;
@@ -212,37 +156,92 @@ void OPTTSP::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon
 //		int pos = 1;
 //		bool found = false;
 //
-//		route.at(k - 1) = current;
-//
-//		while (!found && (pos < num_pokemon)) {
+//		while (!found) {
 //			nodeEdge& next_edge = edges.at(current).at(pos);
-//
-//			if (!in_tree.at(next_edge.previous)) {
-//				in_tree.at(next_edge.previous) = true;
+//			
+//			if (num_connections.at(next_edge.previous) < 2) {
+//				++num_connections.at(next_edge.previous);
 //				total_dist += next_edge.distance;
-//				current = next_edge.previous;
 //
 //				found = true;
 //			}
 //			else { ++pos; }
 //		}
+//
+//		found = false;
+//		pos = 1;
+//
+//		while (!found) {
+//
+//			if (pos < num_pokemon) {
+//				if (num_connections.at(pos) == 0) {
+//					current = pos;
+//
+//					found = true;
+//				}
+//				else { ++pos; }
+//			}
+//			else {
+//				if (num_connections.at(pos % num_pokemon) == 1) {
+//					current = pos;
+//					
+//					found = true;
+//				}
+//				else { ++pos; }
+//			}
+//		}
 //	}
 //
-//	route.back() = current;
+//	for (int m = 0; m < num_pokemon; ++m) {
+//		if (m != current) {
+//			if (num_connections.at(m) < 2) {
+//				total_dist += edges.at(current).at(m).distance;
 //
-//	total_dist += node_distance(nodes.at(current), nodes.at(0));
+//				break;
+//			}
+//		}
+//	}
+
+	vector <bool> in_tree (num_pokemon, false);
+	in_tree.at(0) = true;
+
+	int current = 0;
+	double total_dist = 0.0;
+	for (int k = 1; k < num_pokemon; ++k) {
+		int pos = 1;
+		bool found = false;
+
+		route.at(k - 1) = current;
+
+		while (!found && (pos < num_pokemon)) {
+			nodeEdge& next_edge = edges.at(current).at(pos);
+
+			if (!in_tree.at(next_edge.previous)) {
+				in_tree.at(next_edge.previous) = true;
+				total_dist += next_edge.distance;
+				current = next_edge.previous;
+
+				found = true;
+			}
+			else { ++pos; }
+		}
+	}
+
+	route.back() = current;
+
+	total_dist += node_distance(nodes.at(current), nodes.at(0));
+
+	/////////////////////////////////////////////////////////////////
+//	cout << "Route:\n";
 //
-//	/////////////////////////////////////////////////////////////////
-////	cout << "Route:\n";
-////
-////	for (vector <int>::iterator it = route.begin(); it != route.end(); ++it) {
-////		cout << *it << ' ';
-////	}
-////	cout << "\n";
-//	//////////////////////////////////////////////////////////////////
-//
-//	return total_dist;
-//}
+//	for (vector <int>::iterator it = route.begin(); it != route.end(); ++it) {
+//		cout << *it << ' ';
+//	}
+//	cout << "\n";
+	//////////////////////////////////////////////////////////////////
+
+	return total_dist;
+}
 
 void OPTTSP::priority_depth_first_search(const vector <node> &nodes,
 										 const vector < vector <nodeEdge> > &edges,

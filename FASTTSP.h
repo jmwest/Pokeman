@@ -22,6 +22,15 @@ private:
 	void get_pokemon_locations(vector <node> &nodes,
 							   const int &num_pokemon);
 
+	void uncross_edges(vector <node> &nodes,
+					   vector <int> &route,
+					   const int &num_pokemon);
+
+	bool check_edges_crossed(const node &e1_n1,
+							 const node &e1_n2,
+							 const node &e2_n1,
+							 const node &e2_n2);
+
 	void print_TSP(const double &weight,
 				   const vector <int> &path);
 
@@ -99,53 +108,6 @@ double FASTTSP::make_TSP_approximation(const vector <node> &nodes,
 
 	total_dist += node_distance(nodes.at(0), nodes.at(route.back()));
 
-//	for (int i = 0; i < num_pokemon; ++i) {
-//		
-//		node c_node = nodes.at(i);
-//		for (int j = 0; j < num_pokemon; ++j) {
-//			
-//			if (i != j) {
-//				nodeEdge& c_edge = edges.at(i).at(j);
-//				c_edge.distance = node_distance(c_node, nodes.at(j));
-//				c_edge.previous = j;
-//			}
-//			else {
-//				edges.at(i).at(j).distance = -1.0;
-//			}
-//		}
-//		
-//		sort(edges.at(i).begin(), edges.at(i).end(), nodeEdgeComparator());
-//	}
-//
-//	vector <bool> in_tree (num_pokemon, false);
-//	in_tree.at(0) = true;
-//	
-//	int current = 0;
-//	double total_dist = 0.0;
-//	for (int k = 1; k < num_pokemon; ++k) {
-//		int pos = 1;
-//		bool found = false;
-//		
-//		route.at(k - 1) = current;
-//		
-//		while (!found && (pos < num_pokemon)) {
-//			nodeEdge& next_edge = edges.at(current).at(pos);
-//			
-//			if (!in_tree.at(next_edge.previous)) {
-//				in_tree.at(next_edge.previous) = true;
-//				total_dist += next_edge.distance;
-//				current = next_edge.previous;
-//				
-//				found = true;
-//			}
-//			else { ++pos; }
-//		}
-//	}
-//	
-//	route.back() = current;
-//	
-//	total_dist += node_distance(nodes.at(current), nodes.at(0));
-
 	return total_dist;
 }
 
@@ -170,6 +132,141 @@ void FASTTSP::get_pokemon_locations(vector <node> &nodes, const int & num_pokemo
 	}
 
 	return;
+}
+
+void uncross_edges(vector <node> &nodes,
+				   vector <int> &route,
+				   const int &num_pokemon) {
+
+	for (int i = 0; i < num_pokemon - 1; ++i) {
+
+		for (int j = i + 2; j < num_pokemon; ++j) {
+			
+		}
+	}
+
+	return;
+}
+
+bool check_edges_crossed(const node &e1_n1,
+						 const node &e1_n2,
+						 const node &e2_n1,
+						 const node &e2_n2) {
+
+	double x_intercept = 0.0;
+	double y_intercept = 0.0;
+
+	double slope_one = 0.0;
+	double slope_two = 0.0;
+
+	if (e1_n1.x == e1_n2.x) {
+
+		if (e2_n1.x == e2_n2.x) {
+
+			if (e1_n1.x == e2_n1.x) {
+				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
+					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))) {
+					
+				}
+			}
+			else { return false; }
+		}
+		else {
+			slope_one = double(e1_n2.y - e1_n1.y) / (e1_n2.x - e1_n1.x);
+			slope_two = double(e2_n2.y - e2_n1.y) / (e2_n2.x - e2_n1.x);
+
+			y_intercept = e1_n1.y + slope_one * ( ((e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one)) - e1_n1.x );
+
+			if (((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+				|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y)))
+				&& ((!(e2_n1.x < e1_n1.x) && !(e2_n2.x > e1_n1.x))
+					|| (!(e2_n1.x > e1_n1.x) && !(e2_n2.x < e1_n1.x)))){
+				return true;
+			}
+		}
+	}
+	else if (e2_n1.x == e2_n2.x) {
+
+		if (e1_n1.x == e1_n2.x) {
+
+			if (e1_n1.x == e2_n1.x) {
+
+			}
+			else { return false; }
+		}
+		else {
+			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
+
+			y_intercept = e1_n1.y + slope_one * ( ((e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one)) - e1_n1.x );
+
+			if (((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+				 || (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+				&& ((!(e1_n1.x < e2_n1.x) && !(e1_n2.x > e2_n1.x))
+					|| (!(e1_n1.x > e2_n1.x) && !(e1_n2.x < e2_n1.x)))){
+					return true;
+			}
+		}
+	}
+	else if (e1_n1.y == e1_n2.y) {
+
+		if (e2_n1.y == e2_n2.y) {
+
+			if (e1_n1.y == e2_n1.y) {
+
+			}
+			else { return false; }
+		}
+		else {
+			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
+			
+			x_intercept = (e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one);
+			
+			if ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+				|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x))) {
+				return true;
+			}
+			if (((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+				 || (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+				&& ((!(e2_n1.y < e1_n1.y) && !(e2_n2.y > e1_n1.y))
+					|| (!(e2_n1.y > e1_n1.y) && !(e2_n2.y < e1_n1.y)))){
+					return true;
+			}
+		}
+	}
+	else if (e2_n1.y == e2_n2.y) {
+
+		if (e1_n1.y == e1_n2.y) {
+
+			if (e1_n1.y == e2_n1.y) {
+
+			}
+			else { return false; }
+		}
+		else {
+			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
+			
+			x_intercept = (e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one);
+			
+			if ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+				|| (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x))) {
+				return true;
+			}
+			if (((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+				 || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+				&& ((!(e1_n1.y < e2_n1.y) && !(e1_n2.y > e2_n1.y))
+					|| (!(e1_n1.y > e2_n1.y) && !(e1_n2.y < e2_n1.y)))){
+					return true;
+			}
+		}
+	}
+	else {
+		
+	}
+
+	return false;
 }
 
 void FASTTSP::print_TSP(const double &weight, const vector <int> &path) {

@@ -185,6 +185,16 @@ help:
 	@echo "$$MAKEFILE_HELP"
 
 #####################
+# SAMPLE TEST CASES #
+#####################
+sampleTests : poke* MST.h OPTTSP.h FASTTSP.h node.h
+	g++ $(CXXFLAGS) -O3 poke.cpp -o poke
+	./poke -m MST < sampleA.in > MST-A.out
+	./poke -m OPTTSP < sampleB.in > OPT-B.out
+	./poke -m FASTTSP < sampleA.in > FAST-A.out
+	./poke -m FASTTSP < sampleB.in > FAST-B.out
+
+#####################
 # MY OWN TEST CASES #
 #####################
 

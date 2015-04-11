@@ -51,13 +51,13 @@ EXECUTABLE 	= poke
 CXX			= g++
 
 # list of test drivers (with main()) for development
-TESTSOURCES = $(wildcard test*.cpp)
+TESTSOURCES = $(wildcard test*.cpp Crossed*)
 # names of test executables
 TESTS       = $(TESTSOURCES:%.cpp=%)
 
 # list of sources used in project
 SOURCES 	= $(wildcard *.cpp)
-SOURCES     := $(filter-out $(TESTSOURCES), $(SOURCES))
+SOURCES     := $(filter-out $(TESTSOURCES) CrossedEdgeTest.cpp, $(SOURCES))
 # list of objects used in project
 OBJECTS		= $(SOURCES:poke.cpp=poke.o)
 
@@ -134,7 +134,7 @@ $(PARTIAL_SUBMITFILE): $(PARTIAL_SUBMITFILES)
 	@echo !!! WARNING: No test cases included. Use 'make fullsubmit' to include test cases. !!!
 
 # make fullsubmit.tar.gz - cleans, runs dos2unix, creates tarball including test cases
-FULL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp test*.txt))
+FULL_SUBMITFILES=$(filter-out $(TESTSOURCES), $(wildcard Makefile *.h *.cpp test-*-*.txt))
 $(FULL_SUBMITFILE): $(FULL_SUBMITFILES)
 	rm -f $(PARTIAL_SUBMITFILE) $(FULL_SUBMITFILE)
 	#dos2unix $(FULL_SUBMITFILES)

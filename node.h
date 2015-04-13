@@ -14,8 +14,8 @@
 
 struct node {
 public:
-	int x;
-	int y;
+	long long x;
+	long long y;
 };
 
 struct nodeEdge {
@@ -55,8 +55,8 @@ double nodeBeginnerDistance::operator() (const node &one, const node &two) {
 		return -1;
 	}
 	else {
-		int x_dist = one.x - two.x;
-		int y_dist = one.y - two.y;
+		double x_dist = one.x - two.x;
+		double y_dist = one.y - two.y;
 		double dist = (x_dist * x_dist) + (y_dist * y_dist);
 
 		return sqrt(dist);

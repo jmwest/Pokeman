@@ -55,25 +55,28 @@ void MST::run_MST() {
 	in_tree.at(current) = true;
 	min_dist.at(current).previous = 0;
 	min_dist.at(current).distance = 0;
-	cerr << setprecision(2);
-	cerr << fixed;
+
+//	cerr << setprecision(2);
+//	cerr << fixed;
+
 	for (int i = 1; i < num_pokemon; ++i) {
 
-//		cerr << current << ":\n";
+//		cerr << "Current node: " << current << endl;
+
 		for (int j = 1; j < num_pokemon; ++j) {
 			if (!in_tree.at(j)) {
 				double dist = node_distance(c_node, nodes.at(j));
 
 				nodeEdge& c_edge = min_dist.at(j);
 
-//				cerr << '\t' << j << "; " << dist << "  \t" << c_edge.distance << endl;
+//				cerr << '\t' << j << ' ' << dist << "  \tShortest- prev; " << c_edge.previous << " dist; " << c_edge.distance << endl;
 
 				if (dist >= -0.5) {
 					if (c_edge.previous == -1) {
 						c_edge.previous = current;
 						c_edge.distance = dist;
 					}
-					else if (dist < c_edge.distance) {
+					else if (dist < min_dist.at(j).distance) {
 						c_edge.previous = current;
 						c_edge.distance = dist;
 					}
@@ -91,32 +94,12 @@ void MST::run_MST() {
 				}
 			}
 		}
-//		cerr << "\nWeight: " << next_edge.distance << endl << endl;
-//		for (int k = 1; k < num_pokemon; ++k) {
-//			if (!in_tree.at(k)) {
-//
-//				nodeEdge& c_edge = min_dist.at(k);
-//
-//				if (c_edge.previous != -1) {
-//					if (next_edge.previous == -1) {
-//						next_edge.previous = k;
-//						next_edge.distance = c_edge.distance;
-//					}
-//					else if (c_edge.distance < next_edge.distance) {
-//						next_edge.previous = k;
-//						next_edge.distance = c_edge.distance;
-//					}
-//				}
-//			}
-//		}
 
-//		if (next_edge.previous != -1) {
-			current = next_edge.previous;
-			c_node = nodes.at(current);
-			total_dist += next_edge.distance;
+		current = next_edge.previous;
+		c_node = nodes.at(current);
+		total_dist += next_edge.distance;
 
-			in_tree.at(current) = true;
-//		}
+		in_tree.at(current) = true;
 
 		next_edge = {-1, 0};
 	}

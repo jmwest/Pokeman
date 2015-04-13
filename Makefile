@@ -51,7 +51,7 @@ EXECUTABLE 	= poke
 CXX			= g++
 
 # list of test drivers (with main()) for development
-TESTSOURCES = $(wildcard test*.cpp Crossed*)
+TESTSOURCES = $(wildcard test*.cpp Crossed* *copy* *out.txt)
 # names of test executables
 TESTS       = $(TESTSOURCES:%.cpp=%)
 

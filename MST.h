@@ -49,20 +49,24 @@ void MST::run_MST() {
 	get_pokemon_locations(nodes, num_pokemon);
 
 	int current = 0;
-	node& c_node = nodes.at(current);
-	nodeEdge next_edge = nodeEdge(-1, 0);
+	node c_node = nodes.at(current);
+	nodeEdge next_edge = {-1, 0};
 
 	in_tree.at(current) = true;
 	min_dist.at(current).previous = 0;
 	min_dist.at(current).distance = 0;
-
+	cerr << setprecision(2);
+	cerr << fixed;
 	for (int i = 1; i < num_pokemon; ++i) {
 
+//		cerr << current << ":\n";
 		for (int j = 1; j < num_pokemon; ++j) {
 			if (!in_tree.at(j)) {
 				double dist = node_distance(c_node, nodes.at(j));
 
 				nodeEdge& c_edge = min_dist.at(j);
+
+//				cerr << '\t' << j << "; " << dist << "  \t" << c_edge.distance << endl;
 
 				if (dist >= -0.5) {
 					if (c_edge.previous == -1) {
@@ -75,7 +79,7 @@ void MST::run_MST() {
 					}
 				}
 
-				if (c_edge.previous >= -0.5) {
+				if (c_edge.previous != -1) {
 					if (next_edge.previous == -1) {
 						next_edge.previous = j;
 						next_edge.distance = c_edge.distance;
@@ -87,16 +91,34 @@ void MST::run_MST() {
 				}
 			}
 		}
+//		cerr << "\nWeight: " << next_edge.distance << endl << endl;
+//		for (int k = 1; k < num_pokemon; ++k) {
+//			if (!in_tree.at(k)) {
+//
+//				nodeEdge& c_edge = min_dist.at(k);
+//
+//				if (c_edge.previous != -1) {
+//					if (next_edge.previous == -1) {
+//						next_edge.previous = k;
+//						next_edge.distance = c_edge.distance;
+//					}
+//					else if (c_edge.distance < next_edge.distance) {
+//						next_edge.previous = k;
+//						next_edge.distance = c_edge.distance;
+//					}
+//				}
+//			}
+//		}
 
-		if (next_edge.previous != -1) {
+//		if (next_edge.previous != -1) {
 			current = next_edge.previous;
 			c_node = nodes.at(current);
 			total_dist += next_edge.distance;
 
 			in_tree.at(current) = true;
+//		}
 
-			next_edge = nodeEdge(-1, 0);
-		}
+		next_edge = {-1, 0};
 	}
 
 	print_MST(total_dist, min_dist);
@@ -129,7 +151,7 @@ void MST::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon) {
 				else if ((current.x == 0) && (current.y < 0)) {
 					coast_pkmn = true;
 				}
-				else if ((current.x > 0) && (current.y > 0)) {
+				else if ((current.x > 0) || (current.y > 0)) {
 					land_pkmn = true;
 				}
 				else if ((current.x < 0) && (current.y < 0)) {

@@ -8,15 +8,12 @@
 
 #include "CrossedEdgeTest.h"
 
+#include "node.h"
+
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
-
-struct node {
-	int x;
-	int y;
-};
 
 bool check_edges_crossed(const node &e1_n1,
 						 const node &e1_n2,
@@ -30,7 +27,7 @@ bool check_adjacent_edges_overlap(const node &e1_n1,
 
 int main() {
 
-	cout << "________________________________________\n";
+	cout << "________________________________________\n\n";
 	cout << "Begin checking edges_crossed function...\n" << endl;
 
 	int total_correct = 0;
@@ -341,7 +338,141 @@ int main() {
 	cout << fixed;
 
 	cout << "\n\tPercent Correct: " << (double(total_correct) / total) * 100 << '%' << endl;
-	cout << "________________________________________\n";
+	cout << "________________________________________\n\n";
+
+	cout << "Begin checking nodeBeginnerDistance...\n\n";
+
+	nodeBeginnerDistance n_d = nodeBeginnerDistance();
+	total = 0;
+	total_correct = 0;
+
+	one.x = -1;
+	one.y = -3;
+
+	two.x = -2;
+	two.y = 0;
+
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = 0;
+	one.y = -3;
+	
+	two.x = 2;
+	two.y = 0;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -1;
+	one.y = -3;
+	
+	two.x = 2;
+	two.y = 1;
+	
+	if (n_d(one,two) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -3;
+	one.y = -3;
+	
+	two.x = 1;
+	two.y = -3;
+	
+	if (n_d(one,two) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -1;
+	one.y = -3;
+	
+	two.x = 0;
+	two.y = -4;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -1;
+	one.y = -3;
+	
+	two.x = 0;
+	two.y = 0;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = 1;
+	one.y = 3;
+	
+	two.x = 0;
+	two.y = 0;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -1;
+	one.y = 0;
+	
+	two.x = 0;
+	two.y = 4;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = 0;
+	one.y = -3;
+	
+	two.x = 4;
+	two.y = -4;
+	
+	if (n_d(one,two) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) != -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -5;
+	one.y = -1;
+	
+	two.x = 4;
+	two.y = 0;
+	
+	if (n_d(one,two) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) == -1) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	one.x = -5;
+	one.y = -1;
+	
+	two.x = -5;
+	two.y = -1;
+	
+	if (n_d(one,two) == 0) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	
+	if (n_d(two,one) == 0) { ++total_correct; cout << '.'; } else { cout << 'x'; }
+	total += 2;
+
+	cout << "\n\nTesting done. Results:\n\n";
+	cout << "\tNumber Correct: " << total_correct << endl;
+	cout << "\tTotal Tested: " << total << endl;
+
+	cout << "\n\tPercent Correct: " << (double(total_correct) / total) * 100 << '%' << endl;
+	cout << "________________________________________\n\n";
 
 	return 0;
 }

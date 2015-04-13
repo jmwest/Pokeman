@@ -41,13 +41,21 @@ int main(int argc, char* argv[]) {
 			opt_tsp.run_OPTTSP();
 
 //			ofstream out;
-//			out.open("test-MST5.txt");
+//			out.open("test-MST8.txt");
 //
-//			out << "10000\n";
-//			for (int i = -50; i < 50; ++i) {
-//				for (int j = -50; j < 50; ++j) {
-//					out << i << ' ' << j << '\n';
+//			out << "50000\n";
+//			for (int i = 1; i < 50001; ++i) {
+//				int multiplier_one = 1;
+//				int multiplier_two = 1;
+//
+//				if (rand() % 2) {
+//					multiplier_one = -1;
 //				}
+//				if (rand() % 2) {
+//					multiplier_two = -1;
+//				}
+//
+//				out << multiplier_one * (rand() % (i * 10))  << ' ' << multiplier_two * (rand() % (i * 10)) << '\n';
 //			}
 //
 //			out.close();

@@ -14,14 +14,16 @@
 
 struct node {
 public:
-	long long x;
-	long long y;
+	double x;
+	double y;
 };
 
 struct nodeEdge {
 public:
 	int previous;
 	double distance;
+
+	nodeEdge() {}
 
 	nodeEdge(int prev, double dist)
 	: previous(prev), distance(dist) {}

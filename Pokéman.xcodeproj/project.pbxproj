@@ -55,7 +55,6 @@
 		27AE11D21AD0772600A3212B /* test-MST4.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST4.txt"; sourceTree = SOURCE_ROOT; };
 		27BD086C1AD0D467009D2E70 /* test-MST5.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST5.txt"; sourceTree = SOURCE_ROOT; };
 		27E11C3D1ADC1CDD0025DAFF /* test-MST11.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST11.txt"; sourceTree = SOURCE_ROOT; };
-		27E11C3E1ADC24D20025DAFF /* MST-5.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "MST-5.out"; sourceTree = SOURCE_ROOT; };
 		27E58E4D1AD217DC00C8952A /* test- */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-"; sourceTree = SOURCE_ROOT; };
 		27F257391ACED4150006E15E /* MST.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MST.h; sourceTree = SOURCE_ROOT; };
 		27F2573A1ACED41F0006E15E /* FASTTSP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FASTTSP.h; sourceTree = SOURCE_ROOT; };
@@ -133,7 +132,6 @@
 				27AE11D11AD070BB00A3212B /* test-MST3.txt */,
 				27AE11D21AD0772600A3212B /* test-MST4.txt */,
 				27BD086C1AD0D467009D2E70 /* test-MST5.txt */,
-				27E11C3E1ADC24D20025DAFF /* MST-5.out */,
 				2728A85F1AD6DEC90087CADA /* test-MST6.txt */,
 				2728A8601AD700230087CADA /* test-MST7.txt */,
 				27670E981AD9ACD800FFF4BB /* test-MST8.txt */,

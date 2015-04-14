@@ -12,6 +12,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include <unordered_set>
 
 #include "node.h"
 
@@ -94,6 +95,12 @@ double FASTTSP::make_TSP_approximation(const vector <node> &nodes,
 									   const int &num_pokemon) {
 
 	nodeFlyDistance node_distance = nodeFlyDistance();
+
+//	unordered_set <node> outies;
+//
+//	for (int i = 1; i < num_pokemon; ++i) {
+//		outies.insert(nodes.at(i));
+//	}
 
 	vector <bool> in_tree (num_pokemon, false);
 	route.push_back(0);

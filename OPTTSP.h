@@ -361,9 +361,11 @@ double OPTTSP::calculate_partial_MST(const vector <node> &nodes,
 			}
 		}
 
-		total_dist += min_edge;
-		min_edge = -1.0;
+//		total_dist += min_edge;
+//		min_edge = -1.0;
 	}
+
+	total_dist += min_edge;
 
 	for (int i = 1; i < num_pokemon - num_in; ++i) {
 

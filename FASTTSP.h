@@ -23,23 +23,23 @@ private:
 	void get_pokemon_locations(vector <node> &nodes,
 							   const int &num_pokemon);
 
-	void uncross_edges(const vector <node> &nodes,
-					   vector <int> &route,
-					   const int &num_pokemon);
-
-	bool check_edges_crossed(const node &e1_n1,
-							 const node &e1_n2,
-							 const node &e2_n1,
-							 const node &e2_n2);
-
+//	void uncross_edges(const vector <node> &nodes,
+//					   vector <int> &route,
+//					   const int &num_pokemon);
+//
+//	bool check_edges_crossed(const node &e1_n1,
+//							 const node &e1_n2,
+//							 const node &e2_n1,
+//							 const node &e2_n2);
+//
 //	bool check_adjacent_edges_overlap(const node &e1_n1,
 //									  const node &e1_n2,
 //									  const node &e2_n1,
 //									  const node &e2_n2);
-
-	void switch_crossed_run(vector <int> &route,
-							int first,
-							int last);
+//
+//	void switch_crossed_run(vector <int> &route,
+//							int first,
+//							int last);
 
 	void print_TSP(const double &weight,
 				   const vector <int> &path);
@@ -166,263 +166,263 @@ void FASTTSP::get_pokemon_locations(vector <node> &nodes,
 	return;
 }
 
-void FASTTSP::uncross_edges(const vector <node> &nodes,
-							vector <int> &route,
-							const int &num_pokemon) {
-
-	node c_pair1, c_pair2, n_pair1, n_pair2;
-	for (int i = 0; i < num_pokemon - 1; ++i) {
-
-		c_pair1 = nodes.at(route.at(i));
-		c_pair2 = nodes.at(route.at(i + 1));
-		for (int j = i + 2; j < num_pokemon; ++j) {
-//cerr << i << ' ' << j << endl;
-
-			if (j < num_pokemon - 1) {
-				n_pair1 = nodes.at(route.at(j));
-				n_pair2 = nodes.at(route.at(j + 1));
-			}
-			else {
-				n_pair1 = nodes.at(route.at(j));
-				n_pair2 = nodes.at(route.at(0));
-			}
-
-			if (check_edges_crossed(c_pair1, c_pair2, n_pair1, n_pair2)) {
-
-//cerr << "\n\nBefore cross: (" << i << ',' << i + 1 << ") (" << j << ',' << j + 1 << ")\n";
-//print_TSP(0.0, route);
-
-				if (j < num_pokemon - 1) {
-					switch_crossed_run(route, i + 1, j);
-				}
-				else {
-					switch_crossed_run(route, 0, i);
-				}
-
-//cerr << "\nAfter cross:\n";
-//print_TSP(0.0, route);
-
-//				i = -1;
-//				break;
-			}
-		}
-	}
-
-	return;
-}
-
-bool FASTTSP::check_edges_crossed(const node &e1_n1,
-								  const node &e1_n2,
-								  const node &e2_n1,
-								  const node &e2_n2) {
-
-	double x_intercept = 0.0;
-	double y_intercept = 0.0;
-
-	double slope_one = 0.0;
-	double slope_two = 0.0;
-
-	if (e1_n1.x == e1_n2.x) {
-
-		if (e2_n1.x == e2_n2.x) {
-
-			if (e1_n1.x == e2_n1.x) {
-
-				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
-					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
-
-					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
-					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
-
-					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
-					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
-
-					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
-					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
-
-					return true;
-				}
-			}
-		}
-		else {
-			slope_two = double(e2_n2.y - e2_n1.y) / (e2_n2.x - e2_n1.x);
-
-			x_intercept = e1_n1.x;
-			y_intercept = e2_n1.y + slope_two * ( x_intercept - e2_n1.x );
-
-			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-				
-				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-				
-				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-				
-				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-					
-					return true;
-			}
-		}
-	}
-	else if (e2_n1.x == e2_n2.x) {
-
-		if (e1_n1.x == e1_n2.x) {
-
-			if (e1_n1.x == e2_n1.x) {
-
-				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
-					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
-					
-					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
-					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
-					
-					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
-					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
-					
-					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
-					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
-					
-					return true;
-				}
-			}
-		}
-		else {
-			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-
-			x_intercept = e2_n1.x;
-			y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
-
-			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-				
-				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-				
-				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-				
-				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-					
-					return true;
-			}
-		}
-	}
-	else if (e1_n1.y == e1_n2.y) {
-
-		if (e2_n1.y == e2_n2.y) {
-
-			if (e1_n1.y == e2_n1.y) {
-
-				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-
-					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-
-					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-
-					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-
-					return true;
-				}
-			}
-		}
-		else {
-			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
-
-			x_intercept = (e1_n1.y - e2_n1.y + slope_two * e2_n1.x) / (slope_two);
-			y_intercept = e1_n1.y;
-
-			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-				
-				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-				
-				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-				
-				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-					
-					return true;
-			}
-		}
-	}
-	else if (e2_n1.y == e2_n2.y) {
-
-		if (e1_n1.y == e1_n2.y) {
-
-			if (e1_n1.y == e2_n1.y) {
-
-				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-
-					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-
-					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-
-					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-
-					return true;
-				}
-			}
-		}
-		else {
-			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-
-			x_intercept = (e2_n1.y - e1_n1.y + slope_one * e1_n1.x) / slope_one;
-			y_intercept = e2_n1.y;
-
-			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-				
-				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-				
-				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-				
-				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-					
-					return true;
-			}
-		}
-	}
-	else {
-		slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-		slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
-
-		x_intercept = (e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one);
-		y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
-
-		if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-					|| (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-
-			&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-
-			&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-
-			&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-
-				return true;
-		}
-	}
-
-	return false;
-}
+//void FASTTSP::uncross_edges(const vector <node> &nodes,
+//							vector <int> &route,
+//							const int &num_pokemon) {
+//
+//	node c_pair1, c_pair2, n_pair1, n_pair2;
+//	for (int i = 0; i < num_pokemon - 1; ++i) {
+//
+//		c_pair1 = nodes.at(route.at(i));
+//		c_pair2 = nodes.at(route.at(i + 1));
+//		for (int j = i + 2; j < num_pokemon; ++j) {
+////cerr << i << ' ' << j << endl;
+//
+//			if (j < num_pokemon - 1) {
+//				n_pair1 = nodes.at(route.at(j));
+//				n_pair2 = nodes.at(route.at(j + 1));
+//			}
+//			else {
+//				n_pair1 = nodes.at(route.at(j));
+//				n_pair2 = nodes.at(route.at(0));
+//			}
+//
+//			if (check_edges_crossed(c_pair1, c_pair2, n_pair1, n_pair2)) {
+//
+////cerr << "\n\nBefore cross: (" << i << ',' << i + 1 << ") (" << j << ',' << j + 1 << ")\n";
+////print_TSP(0.0, route);
+//
+//				if (j < num_pokemon - 1) {
+//					switch_crossed_run(route, i + 1, j);
+//				}
+//				else {
+//					switch_crossed_run(route, 0, i);
+//				}
+//
+////cerr << "\nAfter cross:\n";
+////print_TSP(0.0, route);
+//
+////				i = -1;
+////				break;
+//			}
+//		}
+//	}
+//
+//	return;
+//}
+//
+//bool FASTTSP::check_edges_crossed(const node &e1_n1,
+//								  const node &e1_n2,
+//								  const node &e2_n1,
+//								  const node &e2_n2) {
+//
+//	double x_intercept = 0.0;
+//	double y_intercept = 0.0;
+//
+//	double slope_one = 0.0;
+//	double slope_two = 0.0;
+//
+//	if (e1_n1.x == e1_n2.x) {
+//
+//		if (e2_n1.x == e2_n2.x) {
+//
+//			if (e1_n1.x == e2_n1.x) {
+//
+//				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
+//					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
+//
+//					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
+//					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
+//
+//					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
+//					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
+//
+//					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
+//					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
+//
+//					return true;
+//				}
+//			}
+//		}
+//		else {
+//			slope_two = double(e2_n2.y - e2_n1.y) / (e2_n2.x - e2_n1.x);
+//
+//			x_intercept = e1_n1.x;
+//			y_intercept = e2_n1.y + slope_two * ( x_intercept - e2_n1.x );
+//
+//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+//				
+//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+//				
+//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+//				
+//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
+//					
+//					return true;
+//			}
+//		}
+//	}
+//	else if (e2_n1.x == e2_n2.x) {
+//
+//		if (e1_n1.x == e1_n2.x) {
+//
+//			if (e1_n1.x == e2_n1.x) {
+//
+//				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
+//					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
+//					
+//					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
+//					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
+//					
+//					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
+//					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
+//					
+//					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
+//					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
+//					
+//					return true;
+//				}
+//			}
+//		}
+//		else {
+//			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+//
+//			x_intercept = e2_n1.x;
+//			y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
+//
+//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+//				
+//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+//				
+//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+//				
+//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
+//					
+//					return true;
+//			}
+//		}
+//	}
+//	else if (e1_n1.y == e1_n2.y) {
+//
+//		if (e2_n1.y == e2_n2.y) {
+//
+//			if (e1_n1.y == e2_n1.y) {
+//
+//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
+//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
+//
+//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
+//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
+//
+//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
+//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
+//
+//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
+//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
+//
+//					return true;
+//				}
+//			}
+//		}
+//		else {
+//			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
+//
+//			x_intercept = (e1_n1.y - e2_n1.y + slope_two * e2_n1.x) / (slope_two);
+//			y_intercept = e1_n1.y;
+//
+//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+//				
+//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+//				
+//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+//				
+//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
+//					
+//					return true;
+//			}
+//		}
+//	}
+//	else if (e2_n1.y == e2_n2.y) {
+//
+//		if (e1_n1.y == e1_n2.y) {
+//
+//			if (e1_n1.y == e2_n1.y) {
+//
+//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
+//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
+//
+//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
+//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
+//
+//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
+//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
+//
+//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
+//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
+//
+//					return true;
+//				}
+//			}
+//		}
+//		else {
+//			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+//
+//			x_intercept = (e2_n1.y - e1_n1.y + slope_one * e1_n1.x) / slope_one;
+//			y_intercept = e2_n1.y;
+//
+//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+//				
+//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+//				
+//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+//				
+//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
+//					
+//					return true;
+//			}
+//		}
+//	}
+//	else {
+//		slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
+//		slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
+//
+//		x_intercept = (e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one);
+//		y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
+//
+//		if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
+//					|| (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
+//
+//			&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
+//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
+//
+//			&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
+//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
+//
+//			&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
+//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
+//
+//				return true;
+//		}
+//	}
+//
+//	return false;
+//}
 
 //bool FASTTSP::check_adjacent_edges_overlap(const node &e1_n1,
 //										   const node &e1_n2,
@@ -506,30 +506,30 @@ bool FASTTSP::check_edges_crossed(const node &e1_n1,
 //}
 
 
-void FASTTSP::switch_crossed_run(vector <int> & route,
-								 int first,
-								 int last) {
-
-//	if ((last - first) > (num_pokemon / 2)) {
-//		for (int i = last; i > first; --i) {
-//			
-//		}
+//void FASTTSP::switch_crossed_run(vector <int> & route,
+//								 int first,
+//								 int last) {
+//
+////	if ((last - first) > (num_pokemon / 2)) {
+////		for (int i = last; i > first; --i) {
+////			
+////		}
+////	}
+////	else {
+////		for (int i = first; i < last; ++i) {
+////			
+////		}
+////	}
+//
+//	int temp;
+//	for (int i = 0; i < (last - first + 1) / 2; ++i) {
+//		temp = route.at(first + i);
+//		route.at(first + i) = route.at(last - i);
+//		route.at(last - i) = temp;
 //	}
-//	else {
-//		for (int i = first; i < last; ++i) {
-//			
-//		}
-//	}
-
-	int temp;
-	for (int i = 0; i < (last - first + 1) / 2; ++i) {
-		temp = route.at(first + i);
-		route.at(first + i) = route.at(last - i);
-		route.at(last - i) = temp;
-	}
-
-	return;
-}
+//
+//	return;
+//}
 
 
 void FASTTSP::print_TSP(const double &weight,

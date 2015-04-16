@@ -25,6 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		270EF8861ADEB63600690398 /* test-2-OPTTSP.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-2-OPTTSP.txt"; sourceTree = SOURCE_ROOT; };
 		27144C921AD8B12700E3D88A /* FAST-A.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "FAST-A.out"; sourceTree = SOURCE_ROOT; };
 		27144C931AD8B12E00E3D88A /* FAST-B.out */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "FAST-B.out"; sourceTree = SOURCE_ROOT; };
 		2728A85E1AD460240087CADA /* test-TSP1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-TSP1.txt"; sourceTree = SOURCE_ROOT; };
@@ -142,6 +143,7 @@
 				2728A85E1AD460240087CADA /* test-TSP1.txt */,
 				2728A86C1AD72AE30087CADA /* test-TSP2.txt */,
 				2728A86B1AD708400087CADA /* test-1-MST.txt */,
+				270EF8861ADEB63600690398 /* test-2-OPTTSP.txt */,
 				2728A86E1AD755DB0087CADA /* CrossedEdgeTest.h */,
 				2728A86D1AD755DB0087CADA /* CrossedEdgeTest.cpp */,
 			);

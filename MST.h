@@ -56,20 +56,13 @@ void MST::run_MST() {
 	min_dist.at(current).previous = 0;
 	min_dist.at(current).distance = 0;
 
-//	cerr << setprecision(2);
-//	cerr << fixed;
-
 	for (int i = 1; i < num_pokemon; ++i) {
-
-//		cerr << "Current node: " << current << endl;
 
 		for (int j = 1; j < num_pokemon; ++j) {
 			if (!in_tree.at(j)) {
 				double dist = node_distance(c_node, nodes.at(j));
 
 				nodeEdge& c_edge = min_dist.at(j);
-
-//				cerr << '\t' << j << ' ' << dist << "  \tShortest- prev; " << c_edge.previous << " dist; " << c_edge.distance << endl;
 
 				if (dist >= -0.5) {
 					if (c_edge.previous == -1) {

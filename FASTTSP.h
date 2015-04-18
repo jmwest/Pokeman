@@ -86,48 +86,82 @@ double FASTTSP::make_TSP_approximation(const vector <node> &nodes,
 
 	nodeFlyDistance node_distance = nodeFlyDistance();
 
-//	unordered_set <node> outies;
-//
-//	for (int i = 1; i < num_pokemon; ++i) {
-//		outies.insert(nodes.at(i));
-//	}
+	unordered_set <int> outies;
 
-	vector <bool> in_tree (num_pokemon, false);
+	for (int i = 1; i < num_pokemon; ++i) {
+		outies.insert(i);
+	}
+
 	route.push_back(0);
-	in_tree.at(0) = true;
-
+	
 	int current = 0;
 	int next = 0;
 	double total_dist = 0.0;
 	node c_node;
 	for (int i = 1; i < num_pokemon; ++i) {
-
+		
 		double min_dist = -1.0;
 		c_node = nodes.at(current);
-		for (int j = 1; j < num_pokemon; ++j) {
-			if ((current != j) && (!in_tree.at(j))) {
-				double dist = node_distance(c_node, nodes.at(j));
 
-				if (min_dist < -0.5) {
-					min_dist = dist;
-					next = j;
-				}
-				else if (dist < min_dist) {
-					min_dist = dist;
-					next = j;
-				}
+		for (unordered_set <int>::iterator it = outies.begin(); it != outies.end(); ++it) {
+			double dist = node_distance(c_node, nodes.at(*it));
+
+			if (min_dist < -0.5) {
+				min_dist = dist;
+				next = *it;
+			}
+			else if (dist < min_dist) {
+				min_dist = dist;
+				next = *it;
 			}
 		}
 
 		current = next;
-		in_tree.at(current) = true;
+		outies.erase(current);
 		total_dist += min_dist;
 		min_dist = 0.0;
 
 		route.push_back(current);
 	}
-
+	
 	total_dist += node_distance(nodes.at(0), nodes.at(route.back()));
+
+//	vector <bool> in_tree (num_pokemon, false);
+//	route.push_back(0);
+//	in_tree.at(0) = true;
+//
+//	int current = 0;
+//	int next = 0;
+//	double total_dist = 0.0;
+//	node c_node;
+//	for (int i = 1; i < num_pokemon; ++i) {
+//
+//		double min_dist = -1.0;
+//		c_node = nodes.at(current);
+//		for (int j = 1; j < num_pokemon; ++j) {
+//			if ((current != j) && (!in_tree.at(j))) {
+//				double dist = node_distance(c_node, nodes.at(j));
+//
+//				if (min_dist < -0.5) {
+//					min_dist = dist;
+//					next = j;
+//				}
+//				else if (dist < min_dist) {
+//					min_dist = dist;
+//					next = j;
+//				}
+//			}
+//		}
+//
+//		current = next;
+//		in_tree.at(current) = true;
+//		total_dist += min_dist;
+//		min_dist = 0.0;
+//
+//		route.push_back(current);
+//	}
+//
+//	total_dist += node_distance(nodes.at(0), nodes.at(route.back()));
 
 	return total_dist;
 }

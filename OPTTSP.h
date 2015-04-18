@@ -12,8 +12,6 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <list>
-#include <queue>
 
 #include "node.h"
 

@@ -34,37 +34,19 @@ int main(int argc, char* argv[]) {
 		case MST_MODE: {
 			MST mst;
 			mst.run_MST();
+
 			break;
 		}
 		case OPTTSP_MODE: {
 			OPTTSP opt_tsp;
 			opt_tsp.run_OPTTSP();
 
-//			ofstream out;
-//			out.open("test-MST8.txt");
-//
-//			out << "50000\n";
-//			for (int i = 1; i < 50001; ++i) {
-//				int multiplier_one = 1;
-//				int multiplier_two = 1;
-//
-//				if (rand() % 2) {
-//					multiplier_one = -1;
-//				}
-//				if (rand() % 2) {
-//					multiplier_two = -1;
-//				}
-//
-//				out << multiplier_one * (rand() % (i * 10))  << ' ' << multiplier_two * (rand() % (i * 10)) << '\n';
-//			}
-//
-//			out.close();
-
 			break;
 		}
 		case FASTTSP_MODE: {
 			FASTTSP fast_tsp;
 			fast_tsp.run_FASTTSP();
+
 			break;
 		}
 		default:

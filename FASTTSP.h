@@ -23,23 +23,14 @@ private:
 	void get_pokemon_locations(vector <node> &nodes,
 							   const int &num_pokemon);
 
-//	void uncross_edges(const vector <node> &nodes,
-//					   vector <int> &route,
-//					   const int &num_pokemon);
-//
-//	bool check_edges_crossed(const node &e1_n1,
-//							 const node &e1_n2,
-//							 const node &e2_n1,
-//							 const node &e2_n2);
-//
-//	bool check_adjacent_edges_overlap(const node &e1_n1,
-//									  const node &e1_n2,
-//									  const node &e2_n1,
-//									  const node &e2_n2);
-//
-//	void switch_crossed_run(vector <int> &route,
-//							int first,
-//							int last);
+	void two_opt(const vector <node> &nodes,
+				 vector <int> &route,
+				 const int &num_pokemon,
+				 double &distance);
+
+	void switch_crossed_run(vector <int> &route,
+							int first,
+							int last);
 
 	void print_TSP(const double &weight,
 				   const vector <int> &path);
@@ -73,17 +64,16 @@ void FASTTSP::run_FASTTSP() {
 //	cerr << "Initial path:\n";
 //	print_TSP(shortest_path, route);
 
-//	cerr << "\nUncrossing...\n";
-	uncross_edges(nodes, route, num_pokemon);
+	two_opt(nodes, route, num_pokemon, shortest_path);
 
-	nodeFlyDistance node_dist;
-
-	shortest_path = 0;
-	for (int i = 0; i < num_pokemon - 1; i++) {
-		shortest_path += node_dist(nodes.at(route.at(i)), nodes.at(route.at(i + 1)));
-	}
-
-	shortest_path += node_dist(nodes.at(route.front()), nodes.at(route.back()));
+//	nodeFlyDistance node_dist;
+//
+//	shortest_path = 0.0;
+//	for (int i = 0; i < num_pokemon - 1; ++i) {
+//		shortest_path += node_dist(nodes.at(route.at(i)), nodes.at(route.at(i + 1)));
+//	}
+//
+//	shortest_path += node_dist(nodes.at(route.front()), nodes.at(route.back()));
 
 	print_TSP(shortest_path, route);
 
@@ -166,371 +156,92 @@ void FASTTSP::get_pokemon_locations(vector <node> &nodes,
 	return;
 }
 
-//void FASTTSP::uncross_edges(const vector <node> &nodes,
-//							vector <int> &route,
-//							const int &num_pokemon) {
-//
-//	node c_pair1, c_pair2, n_pair1, n_pair2;
-//	for (int i = 0; i < num_pokemon - 1; ++i) {
-//
-//		c_pair1 = nodes.at(route.at(i));
-//		c_pair2 = nodes.at(route.at(i + 1));
-//		for (int j = i + 2; j < num_pokemon; ++j) {
-////cerr << i << ' ' << j << endl;
-//
-//			if (j < num_pokemon - 1) {
-//				n_pair1 = nodes.at(route.at(j));
-//				n_pair2 = nodes.at(route.at(j + 1));
-//			}
-//			else {
-//				n_pair1 = nodes.at(route.at(j));
-//				n_pair2 = nodes.at(route.at(0));
-//			}
-//
-//			if (check_edges_crossed(c_pair1, c_pair2, n_pair1, n_pair2)) {
-//
-////cerr << "\n\nBefore cross: (" << i << ',' << i + 1 << ") (" << j << ',' << j + 1 << ")\n";
-////print_TSP(0.0, route);
-//
-//				if (j < num_pokemon - 1) {
-//					switch_crossed_run(route, i + 1, j);
-//				}
-//				else {
-//					switch_crossed_run(route, 0, i);
-//				}
-//
-////cerr << "\nAfter cross:\n";
-////print_TSP(0.0, route);
-//
-////				i = -1;
-////				break;
-//			}
-//		}
-//	}
-//
-//	return;
-//}
-//
-//bool FASTTSP::check_edges_crossed(const node &e1_n1,
-//								  const node &e1_n2,
-//								  const node &e2_n1,
-//								  const node &e2_n2) {
-//
-//	double x_intercept = 0.0;
-//	double y_intercept = 0.0;
-//
-//	double slope_one = 0.0;
-//	double slope_two = 0.0;
-//
-//	if (e1_n1.x == e1_n2.x) {
-//
-//		if (e2_n1.x == e2_n2.x) {
-//
-//			if (e1_n1.x == e2_n1.x) {
-//
-//				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
-//					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
-//
-//					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
-//					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
-//
-//					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
-//					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
-//
-//					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
-//					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
-//
-//					return true;
-//				}
-//			}
-//		}
-//		else {
-//			slope_two = double(e2_n2.y - e2_n1.y) / (e2_n2.x - e2_n1.x);
-//
-//			x_intercept = e1_n1.x;
-//			y_intercept = e2_n1.y + slope_two * ( x_intercept - e2_n1.x );
-//
-//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-//				
-//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-//				
-//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-//				
-//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-//					
-//					return true;
-//			}
-//		}
-//	}
-//	else if (e2_n1.x == e2_n2.x) {
-//
-//		if (e1_n1.x == e1_n2.x) {
-//
-//			if (e1_n1.x == e2_n1.x) {
-//
-//				if ((!(e1_n1.y < e2_n1.y) && !(e1_n1.y > e2_n2.y))
-//					|| (!(e1_n1.y > e2_n1.y) && !(e1_n1.y < e2_n2.y))
-//					
-//					|| (!(e1_n2.y < e2_n1.y) && !(e1_n2.y > e2_n2.y))
-//					|| (!(e1_n2.y > e2_n1.y) && !(e1_n2.y < e2_n2.y))
-//					
-//					|| (!(e2_n1.y < e1_n1.y) && !(e2_n1.y > e1_n2.y))
-//					|| (!(e2_n1.y > e1_n1.y) && !(e2_n1.y < e1_n2.y))
-//					
-//					|| (!(e2_n2.y < e1_n1.y) && !(e2_n2.y > e1_n2.y))
-//					|| (!(e2_n2.y > e1_n1.y) && !(e2_n2.y < e1_n2.y))) {
-//					
-//					return true;
-//				}
-//			}
-//		}
-//		else {
-//			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-//
-//			x_intercept = e2_n1.x;
-//			y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
-//
-//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-//				
-//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-//				
-//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-//				
-//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-//					
-//					return true;
-//			}
-//		}
-//	}
-//	else if (e1_n1.y == e1_n2.y) {
-//
-//		if (e2_n1.y == e2_n2.y) {
-//
-//			if (e1_n1.y == e2_n1.y) {
-//
-//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-//
-//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-//
-//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-//
-//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-//
-//					return true;
-//				}
-//			}
-//		}
-//		else {
-//			slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
-//
-//			x_intercept = (e1_n1.y - e2_n1.y + slope_two * e2_n1.x) / (slope_two);
-//			y_intercept = e1_n1.y;
-//
-//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-//				
-//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-//				
-//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-//				
-//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-//					
-//					return true;
-//			}
-//		}
-//	}
-//	else if (e2_n1.y == e2_n2.y) {
-//
-//		if (e1_n1.y == e1_n2.y) {
-//
-//			if (e1_n1.y == e2_n1.y) {
-//
-//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-//
-//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-//
-//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-//
-//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-//
-//					return true;
-//				}
-//			}
-//		}
-//		else {
-//			slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-//
-//			x_intercept = (e2_n1.y - e1_n1.y + slope_one * e1_n1.x) / slope_one;
-//			y_intercept = e2_n1.y;
-//
-//			if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-//				  || (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-//				
-//				&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-//				
-//				&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-//				
-//				&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-//					
-//					return true;
-//			}
-//		}
-//	}
-//	else {
-//		slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-//		slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
-//
-//		x_intercept = (e1_n1.y - e2_n1.y - slope_one * e1_n1.x + slope_two * e2_n1.x) / (slope_two - slope_one);
-//		y_intercept = e1_n1.y + slope_one * ( x_intercept - e1_n1.x );
-//
-//		if ( ((!(x_intercept < e1_n1.x) && !(x_intercept > e1_n2.x))
-//					|| (!(x_intercept > e1_n1.x) && !(x_intercept < e1_n2.x)))
-//
-//			&& ((!(y_intercept < e1_n1.y) && !(y_intercept > e1_n2.y))
-//					|| (!(y_intercept > e1_n1.y) && !(y_intercept < e1_n2.y)))
-//
-//			&& ((!(x_intercept < e2_n1.x) && !(x_intercept > e2_n2.x))
-//					|| (!(x_intercept > e2_n1.x) && !(x_intercept < e2_n2.x)))
-//
-//			&& ((!(y_intercept < e2_n1.y) && !(y_intercept > e2_n2.y))
-//					|| (!(y_intercept > e2_n1.y) && !(y_intercept < e2_n2.y))) ) {
-//
-//				return true;
-//		}
-//	}
-//
-//	return false;
-//}
+void FASTTSP::two_opt(const vector <node> &nodes,
+					  vector <int> &route,
+					  const int &num_pokemon,
+					  double &distance) {
 
-//bool FASTTSP::check_adjacent_edges_overlap(const node &e1_n1,
-//										   const node &e1_n2,
-//										   const node &e2_n1,
-//										   const node &e2_n2) {
-//
-//	double slope_one = 0.0;
-//	double slope_two = 0.0;
-//
-//	if (e1_n1.x == e1_n2.x) {
-//
-//		if (e2_n1.x == e2_n2.x) {
-//
-//			if (e1_n1.x == e2_n1.x) {
-//
-//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-//					
-//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-//					
-//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-//					
-//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-//					
-//					return true;
-//				}
-//			}
-//		}
-//	}
-//	else if (e1_n1.y == e1_n2.y) {
-//
-//		if (e2_n1.y == e2_n2.y) {
-//
-//			if (e1_n1.y == e2_n1.y) {
-//				
-//				if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-//					|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-//					
-//					|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-//					|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-//					
-//					|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-//					|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-//					
-//					|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-//					|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-//					
-//					return true;
-//				}
-//			}
-//		}
-//	}
-//	else {
-//
-//		slope_one = double(e1_n2.y - e1_n1.y)/(e1_n2.x - e1_n1.x);
-//		slope_two = double(e2_n2.y - e2_n1.y)/(e2_n2.x - e2_n1.x);
-//
-//		if (slope_one == slope_two) {
-//
-//			if ((!(e1_n1.x < e2_n1.x) && !(e1_n1.x > e2_n2.x))
-//				|| (!(e1_n1.x > e2_n1.x) && !(e1_n1.x < e2_n2.x))
-//				
-//				|| (!(e1_n2.x < e2_n1.x) && !(e1_n2.x > e2_n2.x))
-//				|| (!(e1_n2.x > e2_n1.x) && !(e1_n2.x < e2_n2.x))
-//				
-//				|| (!(e2_n1.x < e1_n1.x) && !(e2_n1.x > e1_n2.x))
-//				|| (!(e2_n1.x > e1_n1.x) && !(e2_n1.x < e1_n2.x))
-//				
-//				|| (!(e2_n2.x < e1_n1.x) && !(e2_n2.x > e1_n2.x))
-//				|| (!(e2_n2.x > e1_n1.x) && !(e2_n2.x < e1_n2.x))) {
-//				
-//				return true;
-//			}
-//		}
-//	}
-//
-//	return false;
-//}
+	nodeFlyDistance n_d;
 
+//cerr << setprecision(2);
+//cerr << fixed;
+//cerr << "\nTwo Opting...\n";
+	for (int i = 0; i < num_pokemon; ++i) {
 
-//void FASTTSP::switch_crossed_run(vector <int> & route,
-//								 int first,
-//								 int last) {
-//
-////	if ((last - first) > (num_pokemon / 2)) {
-////		for (int i = last; i > first; --i) {
-////			
-////		}
-////	}
-////	else {
-////		for (int i = first; i < last; ++i) {
-////			
-////		}
-////	}
-//
-//	int temp;
-//	for (int i = 0; i < (last - first + 1) / 2; ++i) {
-//		temp = route.at(first + i);
-//		route.at(first + i) = route.at(last - i);
-//		route.at(last - i) = temp;
-//	}
-//
-//	return;
-//}
+		double best_improvement = -1.0;
+		double save = 0.0;
+		int switch1 = -1;
 
+		int c1_node1 = route.at(i % num_pokemon);
+		int c1_node2 = route.at((i + 1) % num_pokemon);
+		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
+
+		for (int j = i + 2; j < num_pokemon + i - 1; ++j) {
+			int c2_node1 = route.at(j % num_pokemon);
+			int c2_node2 = route.at((j + 1) % num_pokemon);
+			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
+
+//			cerr << "\n\t(" << c1_node1 << ',' << c1_node2 << ") (" << c2_node1 << ',' << c2_node2 << "):\n";
+//			cerr << "\tbest: " << switch1 << ", " << best_improvement << '\n';
+//			cerr << "\tcurr: " << c1_dist << ", " << c2_dist << '\n';
+
+			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
+			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
+
+//			cerr << "\tnext: " << next1_dist << ", " << next2_dist << endl;
+
+			save = c1_dist + c2_dist - next1_dist - next2_dist;
+			if (save > 0.0) {
+				if (switch1 == -1) {
+					switch1 = j % num_pokemon;
+					best_improvement = save;
+				}
+				else if (save > best_improvement) {
+					switch1 = j % num_pokemon;
+					best_improvement = save;
+				}
+			}
+		}
+
+		if (switch1 != -1) {
+			int first, last;
+
+			if ((i + 1) % num_pokemon < switch1) {
+				first = (i + 1) % num_pokemon;
+				last = switch1;
+			}
+			else {
+				first = switch1 + 1;
+				last = i % num_pokemon;
+			}
+
+//			print_TSP(distance, route);
+
+			distance -= best_improvement;
+			switch_crossed_run(route, first, last);
+		}
+
+//		cerr << '\n';
+//		print_TSP(distance, route);
+//		cerr << '\n';
+	}
+
+	return;
+}
+
+void FASTTSP::switch_crossed_run(vector <int> &route,
+								 int first,
+								 int last) {
+
+	int temp;
+	for (int i = 0; i < (last - first + 1) / 2; ++i) {
+		temp = route.at(first + i);
+		route.at(first + i) = route.at(last - i);
+		route.at(last - i) = temp;
+	}
+
+	return;
+}
 
 void FASTTSP::print_TSP(const double &weight,
 						const vector <int> &path) {

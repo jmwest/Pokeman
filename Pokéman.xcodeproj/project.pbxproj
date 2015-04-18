@@ -47,6 +47,8 @@
 		2757C53A1ACDEF5F00B2176D /* poke.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = poke.cpp; sourceTree = SOURCE_ROOT; };
 		2757C53B1ACDEF5F00B2176D /* poke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = poke.h; sourceTree = SOURCE_ROOT; };
 		2757C53D1ACDEFC900B2176D /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = SOURCE_ROOT; };
+		2764E3631AE1933600885AB5 /* test-3-MST.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-3-MST.txt"; sourceTree = SOURCE_ROOT; };
+		2764E3641AE193A300885AB5 /* test-4-FASTTSP.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-4-FASTTSP.txt"; sourceTree = SOURCE_ROOT; };
 		27670E981AD9ACD800FFF4BB /* test-MST8.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST8.txt"; sourceTree = SOURCE_ROOT; };
 		27670E9A1AD9C15F00FFF4BB /* test-MST9.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST9.txt"; sourceTree = SOURCE_ROOT; };
 		27670E9B1AD9C43A00FFF4BB /* test-MST10.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "test-MST10.txt"; sourceTree = SOURCE_ROOT; };
@@ -144,6 +146,8 @@
 				2728A86C1AD72AE30087CADA /* test-TSP2.txt */,
 				2728A86B1AD708400087CADA /* test-1-MST.txt */,
 				270EF8861ADEB63600690398 /* test-2-OPTTSP.txt */,
+				2764E3631AE1933600885AB5 /* test-3-MST.txt */,
+				2764E3641AE193A300885AB5 /* test-4-FASTTSP.txt */,
 				2728A86E1AD755DB0087CADA /* CrossedEdgeTest.h */,
 				2728A86D1AD755DB0087CADA /* CrossedEdgeTest.cpp */,
 			);

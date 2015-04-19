@@ -170,7 +170,7 @@ void FASTTSP::get_pokemon_locations(vector <node> &nodes,
 									const int & num_pokemon) {
 
 	string input;
-	
+
 	getline(cin, input);
 
 	static const char c = ' ';
@@ -197,9 +197,49 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 
 	nodeFlyDistance n_d;
 
+//	for (int i = 0; i < num_pokemon; ++i) {
+//
+//		double save = 0.0;
+//
+//		int c1_node1 = route.at(i % num_pokemon);
+//		int c1_node2 = route.at((i + 1) % num_pokemon);
+//		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
+//
+//		for (int j = i + 2; j < num_pokemon + i - 1; ++j) {
+//			int c2_node1 = route.at(j % num_pokemon);
+//			int c2_node2 = route.at((j + 1) % num_pokemon);
+//			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
+//
+//			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
+//			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
+//
+//			save = c1_dist + c2_dist - next1_dist - next2_dist;
+//			if (save > 0.0) {
+//				int first, last;
+//				
+//				if ((i + 1) % num_pokemon < j) {
+//					first = (i + 1) % num_pokemon;
+//					last = j % num_pokemon;
+//				}
+//				else {
+//					first = (j + 1) % num_pokemon;
+//					last = i % num_pokemon;
+//				}
+//
+//				distance -= save;
+//				switch_crossed_run(route, first, last);
+//
+////				--i;
+//				break;
+//			}
+//		}
+//	}
+
 //cerr << setprecision(2);
 //cerr << fixed;
 //cerr << "\nTwo Opting...\n";
+	int num_not_fixed = 0;
+	int lower_est = distance / 1.3;
 	for (int i = 0; i < num_pokemon; ++i) {
 
 		double best_improvement = -1.0;
@@ -253,6 +293,13 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 
 			distance -= best_improvement;
 			switch_crossed_run(route, first, last);
+		}
+		else {
+			++num_not_fixed;
+		}
+
+		if ((num_pokemon > 1000) && ((lower_est >= distance) && (num_not_fixed > (num_pokemon / 3)))) {
+			break;
 		}
 
 //		cerr << '\n';

@@ -36,13 +36,6 @@ public:
 	}
 };
 
-struct nodeEdgeMaxComparator {
-public:
-	bool operator() (const nodeEdge &one, const nodeEdge &two) {
-		return one.distance > two.distance;
-	}
-};
-
 struct nodeBeginnerDistance {
 public:
 	double operator() (const node &one, const node &two);

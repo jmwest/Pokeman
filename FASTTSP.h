@@ -61,19 +61,7 @@ void FASTTSP::run_FASTTSP() {
 
 	shortest_path = make_TSP_approximation(nodes, route, num_pokemon);
 
-//	cerr << "Initial path:\n";
-//	print_TSP(shortest_path, route);
-
 	two_opt(nodes, route, num_pokemon, shortest_path);
-
-//	nodeFlyDistance node_dist;
-//
-//	shortest_path = 0.0;
-//	for (int i = 0; i < num_pokemon - 1; ++i) {
-//		shortest_path += node_dist(nodes.at(route.at(i)), nodes.at(route.at(i + 1)));
-//	}
-//
-//	shortest_path += node_dist(nodes.at(route.front()), nodes.at(route.back()));
 
 	print_TSP(shortest_path, route);
 
@@ -126,43 +114,6 @@ double FASTTSP::make_TSP_approximation(const vector <node> &nodes,
 	
 	total_dist += node_distance(nodes.at(0), nodes.at(route.back()));
 
-//	vector <bool> in_tree (num_pokemon, false);
-//	route.push_back(0);
-//	in_tree.at(0) = true;
-//
-//	int current = 0;
-//	int next = 0;
-//	double total_dist = 0.0;
-//	node c_node;
-//	for (int i = 1; i < num_pokemon; ++i) {
-//
-//		double min_dist = -1.0;
-//		c_node = nodes.at(current);
-//		for (int j = 1; j < num_pokemon; ++j) {
-//			if ((current != j) && (!in_tree.at(j))) {
-//				double dist = node_distance(c_node, nodes.at(j));
-//
-//				if (min_dist < -0.5) {
-//					min_dist = dist;
-//					next = j;
-//				}
-//				else if (dist < min_dist) {
-//					min_dist = dist;
-//					next = j;
-//				}
-//			}
-//		}
-//
-//		current = next;
-//		in_tree.at(current) = true;
-//		total_dist += min_dist;
-//		min_dist = 0.0;
-//
-//		route.push_back(current);
-//	}
-//
-//	total_dist += node_distance(nodes.at(0), nodes.at(route.back()));
-
 	return total_dist;
 }
 
@@ -196,44 +147,6 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 					  double &distance) {
 
 	nodeFlyDistance n_d;
-
-//	for (int i = 0; i < num_pokemon; ++i) {
-//
-//		double save = 0.0;
-//
-//		int c1_node1 = route.at(i % num_pokemon);
-//		int c1_node2 = route.at((i + 1) % num_pokemon);
-//		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
-//
-//		for (int j = i + 2; j < num_pokemon + i - 1; ++j) {
-//			int c2_node1 = route.at(j % num_pokemon);
-//			int c2_node2 = route.at((j + 1) % num_pokemon);
-//			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
-//
-//			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
-//			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
-//
-//			save = c1_dist + c2_dist - next1_dist - next2_dist;
-//			if (save > 0.0) {
-//				int first, last;
-//				
-//				if ((i + 1) % num_pokemon < j) {
-//					first = (i + 1) % num_pokemon;
-//					last = j % num_pokemon;
-//				}
-//				else {
-//					first = (j + 1) % num_pokemon;
-//					last = i % num_pokemon;
-//				}
-//
-//				distance -= save;
-//				switch_crossed_run(route, first, last);
-//
-////				--i;
-//				break;
-//			}
-//		}
-//	}
 
 	int num_not_fixed = 0;
 	int lower_est = distance / 1.3;

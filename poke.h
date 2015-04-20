@@ -13,9 +13,6 @@
 
 enum MODE {NONE, MST_MODE, OPTTSP_MODE, FASTTSP_MODE};
 
-// REQUIRES:
-// MODIFIES:
-// EFFECTS: uses argc and argv that are passed into the program
 void parse_command_line_input(const int & argc, char* argv[], MODE &mode);
 
 #endif /* defined(__Poke_man__poke__) */

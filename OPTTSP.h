@@ -27,7 +27,7 @@ private:
 								  vector <int> &route,
 								  const int &num_pokemon);
 
-	bool two_opt(const vector <node> &nodes,
+	void two_opt(const vector <node> &nodes,
 				 vector <int> &route,
 				 const int &num_pokemon);
 	
@@ -229,9 +229,9 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 //
 //	uncross_edges(nodes, route, num_pokemon);
 
-	while (two_opt(nodes, route, num_pokemon)) {}
+//	while (two_opt(nodes, route, num_pokemon)) {}
 
-//	two_opt(nodes, route, num_pokemon);
+	two_opt(nodes, route, num_pokemon);
 
 	double total_dist = 0.0;
 	for (int i = 0; i < num_pokemon - 1; i++) {
@@ -253,16 +253,17 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 	return total_dist;
 }
 
-bool OPTTSP::two_opt(const vector <node> &nodes,
+void OPTTSP::two_opt(const vector <node> &nodes,
 					 vector <int> &route,
 					 const int &num_pokemon) {
 	
 	nodeFlyDistance n_d;
-	bool made_change = false;
 	
 	for (int i = 0; i < num_pokemon; ++i) {
 		
+		double best_improvement = -1.0;
 		double save = 0.0;
+		int switch1 = -1;
 		
 		int c1_node1 = route.at(i % num_pokemon);
 		int c1_node2 = route.at((i + 1) % num_pokemon);
@@ -278,42 +279,34 @@ bool OPTTSP::two_opt(const vector <node> &nodes,
 			
 			save = c1_dist + c2_dist - next1_dist - next2_dist;
 			if (save > 0.0) {
-				int first, last;
-				
-				if ((i + 1) % num_pokemon < j) {
-					first = (i + 1) % num_pokemon;
-					last = j % num_pokemon;
+				if (switch1 == -1) {
+					switch1 = j % num_pokemon;
+					best_improvement = save;
 				}
-				else {
-					first = (j + 1) % num_pokemon;
-					last = i % num_pokemon;
+				else if (save > best_improvement) {
+					switch1 = j % num_pokemon;
+					best_improvement = save;
 				}
-				
-				switch_crossed_run(route, first, last);
-				made_change = true;
-
-				break;
 			}
 		}
 		
-//		if (switch1 != -1) {
-//			int first, last;
-//			
-//			if ((i + 1) % num_pokemon < switch1) {
-//				first = (i + 1) % num_pokemon;
-//				last = switch1;
-//			}
-//			else {
-//				first = switch1 + 1;
-//				last = i % num_pokemon;
-//			}
-//			
-//			switch_crossed_run(route, first, last);
-//			made_change = true;
-//		}
+		if (switch1 != -1) {
+			int first, last;
+			
+			if ((i + 1) % num_pokemon < switch1) {
+				first = (i + 1) % num_pokemon;
+				last = switch1;
+			}
+			else {
+				first = switch1 + 1;
+				last = i % num_pokemon;
+			}
+			
+			switch_crossed_run(route, first, last);
+		}
 	}
 	
-	return made_change;
+	return;
 }
 
 void OPTTSP::switch_crossed_run(vector <int> &route,
@@ -404,7 +397,7 @@ void OPTTSP::priority_depth_first_search(const vector <node> &nodes,
 			in_tree.at(next_node) = true;
 			double min_remaining = calculate_partial_MST(nodes, edges, in_tree, next_node, num_in + 1);
 
-			if (path_length + next_edge + min_remaining < best_path) {
+			if (path_length + next_edge + min_remaining <= best_path) {
 				priority_depth_first_search(nodes, edges, current_best, current_path, in_tree, node_distance, num_pokemon, path_length + next_edge, best_path, num_in + 1, next_node, first_node);
 			}
 

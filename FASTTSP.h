@@ -235,9 +235,6 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 //		}
 //	}
 
-//cerr << setprecision(2);
-//cerr << fixed;
-//cerr << "\nTwo Opting...\n";
 	int num_not_fixed = 0;
 	int lower_est = distance / 1.3;
 	for (int i = 0; i < num_pokemon; ++i) {
@@ -255,14 +252,8 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 			int c2_node2 = route.at((j + 1) % num_pokemon);
 			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
 
-//			cerr << "\n\t(" << c1_node1 << ',' << c1_node2 << ") (" << c2_node1 << ',' << c2_node2 << "):\n";
-//			cerr << "\tbest: " << switch1 << ", " << best_improvement << '\n';
-//			cerr << "\tcurr: " << c1_dist << ", " << c2_dist << '\n';
-
 			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
 			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
-
-//			cerr << "\tnext: " << next1_dist << ", " << next2_dist << endl;
 
 			save = c1_dist + c2_dist - next1_dist - next2_dist;
 			if (save > 0.0) {
@@ -289,8 +280,6 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 				last = i % num_pokemon;
 			}
 
-//			print_TSP(distance, route);
-
 			distance -= best_improvement;
 			switch_crossed_run(route, first, last);
 		}
@@ -302,9 +291,9 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 			break;
 		}
 
-//		cerr << '\n';
-//		print_TSP(distance, route);
-//		cerr << '\n';
+		if ((num_pokemon > 10000) && ((lower_est >= distance) && (num_not_fixed > num_pokemon / 5))) {
+			break;
+		}
 	}
 
 	return;

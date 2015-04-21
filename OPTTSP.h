@@ -23,11 +23,12 @@ private:
 							   const int &num_pokemon);
 
 	double make_TSP_approximation(const vector <node> &nodes,
-								  vector < vector <nodeEdge> > &edges,
+								  vector < vector <nodeEdge> > &sorted_edges,
+								  vector < vector <nodeEdge> > &unsorted_edges,
 								  vector <int> &route,
 								  const int &num_pokemon);
 
-	void two_opt(const vector <node> &nodes,
+	void two_opt(vector < vector <nodeEdge> > &unsorted_edges,
 				 vector <int> &route,
 				 const int &num_pokemon);
 	
@@ -36,7 +37,8 @@ private:
 							int last);
 
 	void priority_depth_first_search(const vector <node> &nodes,
-									 const vector < vector <nodeEdge> > &edges,
+									 const vector < vector <nodeEdge> > &sorted_edges,
+									 const vector < vector <nodeEdge> > &unsorted_edges,
 									 vector <int> &current_best,
 									 vector <int> current_path,
 									 vector <bool> in_tree,
@@ -49,7 +51,7 @@ private:
 									 const int &first_node);
 
 	double calculate_partial_MST(const vector <node> &nodes,
-								 const vector < vector <nodeEdge> > &edges,
+								 const vector < vector <nodeEdge> > &sorted_edges,
 								 vector <bool> in_tree,
 								 const int &start,
 								 const int &num_in);
@@ -73,18 +75,19 @@ void OPTTSP::run_OPTTSP() {
 	cin >> num_pokemon;
 	
 	vector <node> nodes (num_pokemon);
-	vector < vector <nodeEdge> > edges (num_pokemon, vector <nodeEdge> (num_pokemon, nodeEdge(-1, 0.0)));
+	vector < vector <nodeEdge> > sorted_edges (num_pokemon, vector <nodeEdge> (num_pokemon, nodeEdge(-1, 0.0)));
+	vector < vector <nodeEdge> > unsorted_edges (sorted_edges);
 	vector <int> route (num_pokemon, 0);
 	vector <bool> in_tree (num_pokemon, false);
 	nodeFlyDistance n_distance;
 
 	get_pokemon_locations(nodes, num_pokemon);
 
-	shortest_path = make_TSP_approximation(nodes, edges, route, num_pokemon);
+	shortest_path = make_TSP_approximation(nodes, sorted_edges, unsorted_edges, route, num_pokemon);
 
 	int initial_node = 0;
 	in_tree.at(0) = true;
-	priority_depth_first_search(nodes, edges, route, vector <int> (), in_tree, n_distance, num_pokemon, 0.0, shortest_path, 1, 0, initial_node);
+	priority_depth_first_search(nodes, sorted_edges, unsorted_edges, route, vector <int> (), in_tree, n_distance, num_pokemon, 0.0, shortest_path, 1, 0, initial_node);
 
 	print_TSP(shortest_path, route);
 
@@ -115,7 +118,8 @@ void OPTTSP::get_pokemon_locations(vector <node> &nodes, const int & num_pokemon
 }
 
 double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
-									  vector < vector <nodeEdge> > &edges,
+									  vector < vector <nodeEdge> > &sorted_edges,
+									  vector < vector <nodeEdge> > &unsorted_edges,
 									  vector <int> &route,
 									  const int &num_pokemon) {
 
@@ -127,16 +131,18 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 		for (int j = 0; j < num_pokemon; ++j) {
 
 			if (i != j) {
-				nodeEdge& c_edge = edges.at(i).at(j);
+				nodeEdge& c_edge = unsorted_edges.at(i).at(j);
 				c_edge.distance = node_distance(c_node, nodes.at(j));
 				c_edge.previous = j;
 			}
 			else {
-				edges.at(i).at(j).distance = -1.0;
+				unsorted_edges.at(i).at(j).distance = -1.0;
 			}
 		}
 
-		sort(edges.at(i).begin(), edges.at(i).end(), nodeEdgeComparator());
+		sorted_edges.at(i) = unsorted_edges.at(i);
+
+		sort(sorted_edges.at(i).begin(), sorted_edges.at(i).end(), nodeEdgeComparator());
 	}
 
 	vector <bool> in_tree (num_pokemon, false);
@@ -151,7 +157,7 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 		route.at(k - 1) = current;
 
 		while (!found) {
-			nodeEdge& next_edge = edges.at(current).at(pos);
+			nodeEdge& next_edge = sorted_edges.at(current).at(pos);
 
 			if (!in_tree.at(next_edge.previous)) {
 				in_tree.at(next_edge.previous) = true;
@@ -165,7 +171,9 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 
 	route.back() = current;
 
-	two_opt(nodes, route, num_pokemon);
+	for (int i = 0; i < 2; ++i) {
+		two_opt(unsorted_edges, route, num_pokemon);
+	}
 
 	double total_dist = 0.0;
 	for (int i = 0; i < num_pokemon - 1; i++) {
@@ -177,30 +185,30 @@ double OPTTSP::make_TSP_approximation(const vector <node> &nodes,
 	return total_dist;
 }
 
-void OPTTSP::two_opt(const vector <node> &nodes,
+void OPTTSP::two_opt(vector < vector <nodeEdge> > &unsorted_edges,
 					 vector <int> &route,
 					 const int &num_pokemon) {
 	
-	nodeFlyDistance n_d;
-	
+//	nodeFlyDistance n_d;
+
 	for (int i = 0; i < num_pokemon; ++i) {
 		
 		double best_improvement = -1.0;
 		double save = 0.0;
 		int switch1 = -1;
-		
+
 		int c1_node1 = route.at(i % num_pokemon);
 		int c1_node2 = route.at((i + 1) % num_pokemon);
-		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
-		
+		double c1_dist = unsorted_edges.at(c1_node1).at(c1_node2).distance;
+
 		for (int j = i + 2; j < num_pokemon + i - 1; ++j) {
 			int c2_node1 = route.at(j % num_pokemon);
 			int c2_node2 = route.at((j + 1) % num_pokemon);
-			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
-			
-			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
-			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
-			
+			double c2_dist = unsorted_edges.at(c2_node1).at(c2_node2).distance;
+
+			double next1_dist = unsorted_edges.at(c1_node1).at(c2_node1).distance;
+			double next2_dist = unsorted_edges.at(c1_node2).at(c2_node2).distance;
+
 			save = c1_dist + c2_dist - next1_dist - next2_dist;
 			if (save > 0.0) {
 				if (switch1 == -1) {
@@ -248,7 +256,8 @@ void OPTTSP::switch_crossed_run(vector <int> &route,
 }
 
 void OPTTSP::priority_depth_first_search(const vector <node> &nodes,
-										 const vector < vector <nodeEdge> > &edges,
+										 const vector < vector <nodeEdge> > &sorted_edges,
+										 const vector < vector <nodeEdge> > &unsorted_edges,
 										 vector <int> &current_best,
 										 vector <int> current_path,
 										 vector <bool> in_tree,
@@ -303,10 +312,10 @@ void OPTTSP::priority_depth_first_search(const vector <node> &nodes,
 			int next_node = current_edges.at(j).previous;
 
 			in_tree.at(next_node) = true;
-			double min_remaining = calculate_partial_MST(nodes, edges, in_tree, next_node, num_in + 1);
+			double min_remaining = calculate_partial_MST(nodes, sorted_edges, in_tree, next_node, num_in + 1);
 
 			if (path_length + next_edge + min_remaining <= best_path) {
-				priority_depth_first_search(nodes, edges, current_best, current_path, in_tree, node_distance, num_pokemon, path_length + next_edge, best_path, num_in + 1, next_node, first_node);
+				priority_depth_first_search(nodes, sorted_edges, unsorted_edges, current_best, current_path, in_tree, node_distance, num_pokemon, path_length + next_edge, best_path, num_in + 1, next_node, first_node);
 			}
 
 			in_tree.at(next_node) = false;
@@ -317,7 +326,7 @@ void OPTTSP::priority_depth_first_search(const vector <node> &nodes,
 }
 
 double OPTTSP::calculate_partial_MST(const vector <node> &nodes,
-									 const vector < vector <nodeEdge> > &edges,
+									 const vector < vector <nodeEdge> > &sorted_edges,
 									 vector <bool> in_tree,
 									 const int &start,
 									 const int &num_in) {
@@ -336,10 +345,10 @@ double OPTTSP::calculate_partial_MST(const vector <node> &nodes,
 			nodeEdge c_edge;
 
 			if (a) {
-				c_edge = edges.at(start).at(b);
+				c_edge = sorted_edges.at(start).at(b);
 			}
 			else {
-				c_edge = edges.at(a).at(b);
+				c_edge = sorted_edges.at(a).at(b);
 			}
 
 			int end = c_edge.previous;
@@ -363,7 +372,7 @@ double OPTTSP::calculate_partial_MST(const vector <node> &nodes,
 	for (int i = 1; i < num_pokemon - num_in; ++i) {
 
 		for (int j = 1; j < num_pokemon; ++j) {
-			nodeEdge c_edge = edges.at(current).at(j);
+			nodeEdge c_edge = sorted_edges.at(current).at(j);
 			int next = c_edge.previous;
 
 			if (!in_tree.at(next)) {
@@ -388,12 +397,24 @@ void OPTTSP::print_TSP(const double &weight, const vector <int> &path) {
 
 	ss << weight << '\n';
 
-	for (int i = 0; i < int(path.size()); ++i) {
-		ss << path.at(i);
+	int num_pkmn = int(path.size());
+	int begin = 0;
+	for (int a = 0; a < num_pkmn; ++a) {
+		if (!path.at(a)) {
+			begin = a;
+			
+			break;
+		}
+	}
 
+	for (int i = 0; i < num_pkmn; ++i) {
+		ss << path.at(begin % num_pkmn);
+		
 		if (i < int(path.size()) - 1) {
 			ss << ' ';
 		}
+
+		++begin;
 	}
 
 	cout << ss.str();

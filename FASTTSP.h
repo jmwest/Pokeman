@@ -148,8 +148,10 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 
 	nodeFlyDistance n_d;
 
-//	int num_not_fixed = 0;
-//	int lower_est = distance / 1.3;
+	int num_not_fixed = 0;
+	int lower_est = distance / 1.3;
+	int lower_lim = 0;
+	bool no_change = true;
 	for (int i = 0; i < num_pokemon; ++i) {
 
 		double best_improvement = -1.0;
@@ -160,23 +162,31 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 		int c1_node2 = route.at((i + 1) % num_pokemon);
 		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
 
-		for (int j = i + 2; j < num_pokemon; ++j) {
-			int c2_node1 = route.at(j % num_pokemon);
-			int c2_node2 = route.at((j + 1) % num_pokemon);
-			double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
+		for (int j = lower_lim; j < num_pokemon; ++j) {
+			if (j == i - 1) {
+				j += 2;
+			}
+			else if (j == i) {
+				++j;
+			}
+			else {
+				int c2_node1 = route.at(j % num_pokemon);
+				int c2_node2 = route.at((j + 1) % num_pokemon);
+				double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
 
-			double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
-			double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
+				double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
+				double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
 
-			save = c1_dist + c2_dist - next1_dist - next2_dist;
-			if (save > 0.0) {
-				if (switch1 == -1) {
-					switch1 = j % num_pokemon;
-					best_improvement = save;
-				}
-				else if (save > best_improvement) {
-					switch1 = j % num_pokemon;
-					best_improvement = save;
+				save = c1_dist + c2_dist - next1_dist - next2_dist;
+				if (save > 0.0) {
+					if (switch1 == -1) {
+						switch1 = j;
+						best_improvement = save;
+					}
+					else if (save > best_improvement) {
+						switch1 = j;
+						best_improvement = save;
+					}
 				}
 			}
 		}
@@ -193,19 +203,31 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 				last = i % num_pokemon;
 			}
 
+			no_change = false;
+			if (first < lower_lim) {
+				lower_lim = first;
+			}
+
 			distance -= best_improvement;
 			switch_crossed_run(route, first, last);
 		}
-//		else {
-//			++num_not_fixed;
-//		}
-//
-//		if ((num_pokemon > 10000) && (((lower_est >= distance) && (num_not_fixed > num_pokemon / 5)) || (num_not_fixed > 3 * num_pokemon / 4))) {
-//			break;
-//		}
-//		else if ((num_pokemon > 1000) && (((lower_est >= distance) && (num_not_fixed > (num_pokemon / 3))) || (num_not_fixed > 3 * num_pokemon / 4))) {
-//			break;
-//		}
+		else {
+			++num_not_fixed;
+
+			if (no_change) {
+				++lower_lim;
+			}
+		}
+
+		if ((num_pokemon > 25000) && (num_not_fixed > num_pokemon / 2)) {
+			break;
+		}
+		if ((num_pokemon > 10000) && (((lower_est >= distance) && (num_not_fixed > num_pokemon / 5)))) {
+			break;
+		}
+		else if ((num_pokemon > 1000) && (((lower_est >= distance) && (num_not_fixed > (num_pokemon / 3))))) {
+			break;
+		}
 	}
 
 	return;

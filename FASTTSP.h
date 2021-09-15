@@ -158,9 +158,9 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 		double save = 0.0;
 		int switch1 = -1;
 
-		int c1_node1 = route.at(i % num_pokemon);
-		int c1_node2 = route.at((i + 1) % num_pokemon);
-		double c1_dist = n_d(nodes.at(c1_node1), nodes.at(c1_node2));
+		const node& c1_node1 = nodes.at(route.at(i % num_pokemon));
+		const node& c1_node2 = nodes.at(route.at((i + 1) % num_pokemon));
+		double c1_dist = n_d(c1_node1, c1_node2);
 
 		for (int j = lower_lim; j < num_pokemon; ++j) {
 			if (j == i - 1) {
@@ -170,12 +170,12 @@ void FASTTSP::two_opt(const vector <node> &nodes,
 				++j;
 			}
 			else {
-				int c2_node1 = route.at(j % num_pokemon);
-				int c2_node2 = route.at((j + 1) % num_pokemon);
-				double c2_dist = n_d(nodes.at(c2_node1), nodes.at(c2_node2));
+				const node& c2_node1 = nodes.at(route.at(j % num_pokemon));
+				const node& c2_node2 = nodes.at(route.at((j + 1) % num_pokemon));
+				double c2_dist = n_d(c2_node1, c2_node2);
 
-				double next1_dist = n_d(nodes.at(c1_node1), nodes.at(c2_node1));
-				double next2_dist = n_d(nodes.at(c1_node2), nodes.at(c2_node2));
+				double next1_dist = n_d(c1_node1, c2_node1);
+				double next2_dist = n_d(c1_node2, c2_node2);
 
 				save = c1_dist + c2_dist - next1_dist - next2_dist;
 				if (save > 0.0) {
